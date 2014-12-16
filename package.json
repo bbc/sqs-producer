@@ -1,0 +1,23 @@
+{
+  "name": "sqs-producer",
+  "version": "1.0.0",
+  "description": "Enqueues messages onto a given SQS queue",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BBC/sqs-producer.git"
+  },
+  "author": "ibl-team@lists.forge.bbc.co.uk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BBC/sqs-producer/issues"
+  },
+  "homepage": "https://github.com/BBC/sqs-producer",
+  "dependencies": {
+    "aws-sdk": "^2.1.2",
+    "sinon": "^1.12.2"
+  }
+}
