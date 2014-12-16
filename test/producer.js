@@ -15,7 +15,7 @@ describe('Producer', function () {
 
     producer = Producer.create({
       url: queueUrl,
-      sqs: sqs  
+      sqs: sqs
     }); 
 
   });
