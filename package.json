@@ -1,12 +1,12 @@
 {
   "name": "sqs-producer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Enqueues messages onto a given SQS queue",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
     "coverage": "jscoverage lib lib-cov && NODE_ENV=dev COVERAGE=1 mocha -R html-cov > coverage.html && open coverage.html",
-    "lint" : "jshint ."
+    "lint": "jshint ."
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,8 @@
   },
   "devDependencies": {
     "jscoverage": "^0.5.9",
-    "jshint": "^2.5.10"
+    "jshint": "^2.5.10",
+    "mocha": "^2.0.1"
   },
   "jshintConfig": {
     "quotmark": "single",
@@ -38,6 +39,6 @@
       "beforeEach": false,
       "after": false,
       "afterEach": false
-    }	
+    }
   }
 }
