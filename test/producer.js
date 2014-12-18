@@ -24,16 +24,16 @@ describe('Producer', function () {
     sqs.sendMessageBatch.restore();
   });
 
-  it('sends pids as a batch', function (done) {
+  it('sends messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
-        { Id: 'pid1', MessageBody: 'pid1' },
-        { Id: 'pid2', MessageBody: 'pid2' }
+        { Id: 'message1', MessageBody: 'message1' },
+        { Id: 'message2', MessageBody: 'message2' }
       ],
       QueueUrl: queueUrl
     };
 
-    producer.send(['pid1', 'pid2'], function (err) {
+    producer.send(['message1', 'message2'], function (err) {
       assert.ifError(err);
       sinon.assert.calledOnce(sqs.sendMessageBatch);
       sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
@@ -61,14 +61,14 @@ describe('Producer', function () {
     });
   });
 
-  it('returns an error identifting the message that failed', function (done) {
+  it('returns an error identifting the messages that failed', function (done) {
     sqs.sendMessageBatch.restore();
     
-    var failedMessages = [{Id: 'pid1'}, {Id: 'pid2'}, {Id: 'pid3'}];
+    var failedMessages = [{Id: 'message1'}, {Id: 'message2'}, {Id: 'message3'}];
     sinon.stub(sqs, 'sendMessageBatch').yields(null, {Failed: failedMessages});
     
-    producer.send(['pid1', 'pid2', 'pid3'], function (err) {
-      assert.equal(err.message, 'Failed to send messages: pid1, pid2, pid3');
+    producer.send(['message1', 'message2', 'message3'], function (err) {
+      assert.equal(err.message, 'Failed to send messages: message1, message2, message3');
       done();
     });
   });
