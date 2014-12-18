@@ -1,6 +1,6 @@
 {
   "name": "sqs-producer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Enqueues messages onto a given SQS queue",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,12 @@
   "bugs": {
     "url": "https://github.com/BBC/sqs-producer/issues"
   },
+  "keywords": [
+    "aws",
+    "sqs",
+    "producer",
+    "queue"
+  ],
   "homepage": "https://github.com/BBC/sqs-producer",
   "dependencies": {
     "aws-sdk": "^2.1.2",
