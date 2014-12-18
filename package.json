@@ -13,7 +13,7 @@
     "url": "https://github.com/BBC/sqs-producer.git"
   },
   "author": "ibl-team@lists.forge.bbc.co.uk",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/BBC/sqs-producer/issues"
   },
