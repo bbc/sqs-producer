@@ -74,7 +74,7 @@ describe('Producer', function () {
   });
 
   it('returns the approximate size of the queue', function(done) {
-    var expected = 10;
+    var expected = '10';
     sinon.stub(sqs, 'getQueueAttributes').withArgs({
       QueueUrl: queueUrl,
       AttributeNames: ['ApproximateNumberOfMessages']
@@ -87,7 +87,7 @@ describe('Producer', function () {
     producer.queueSize(function(err, size) {
        sqs.getQueueAttributes.restore();
        assert.ifError(err);
-       assert.equal(size, expected);         
+       assert.strictEqual(size, parseInt(expected));         
        done();
     });  
   });
