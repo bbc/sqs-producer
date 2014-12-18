@@ -42,3 +42,4 @@ To check for problems using JSLint
 
 ```
 npm run lint
+```
