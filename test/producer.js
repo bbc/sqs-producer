@@ -72,4 +72,23 @@ describe('Producer', function () {
       done();
     });
   });
+
+  it('returns the approximate size of the queue', function(done) {
+    var expected = 10;
+    sinon.stub(sqs, 'getQueueAttributes').withArgs({
+      QueueUrl: queueUrl,
+      AttributeNames: ['ApproximateNumberOfMessages']
+    }).yields(null, {
+      Attributes: {
+        ApproximateNumberOfMessages: expected
+      }
+    });
+
+    producer.queueSize(function(err, size) {
+       sqs.getQueueAttributes.restore();
+       assert.ifError(err);
+       assert.equal(size, expected);         
+       done();
+    });  
+  });
 });
