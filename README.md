@@ -1,6 +1,8 @@
 sqs-producer
 ====================
 
+[![Build Status](https://travis-ci.org/BBC/sqs-producer.svg)](https://travis-ci.org/BBC/sqs-producer)
+
 Enqueues messages onto a given SQS queue
 
 ## Installation
@@ -19,7 +21,7 @@ var producer = Producer.create({
 });
 
 producer.send(['msg1', 'msg2'], function(err) {
-  if (err) console.log(err); 
+  if (err) console.log(err);
 });
 
 ```
