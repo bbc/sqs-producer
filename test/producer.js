@@ -1,5 +1,4 @@
-var utils = require('./utils');
-var Producer = utils.require('../lib/producer');
+var Producer = require('../lib/producer');
 var sinon = require('sinon');
 var assert = require('assert');
 
@@ -16,7 +15,7 @@ describe('Producer', function () {
     producer = Producer.create({
       queueUrl: queueUrl,
       sqs: sqs
-    }); 
+    });
 
   });
 
@@ -54,7 +53,7 @@ describe('Producer', function () {
 
     sqs.sendMessageBatch.restore();
     sinon.stub(sqs, 'sendMessageBatch').yields(sqsError);
-    
+
     producer.send(['foo'], function (err) {
       assert.equal(err, sqsError);
       done();
@@ -63,10 +62,10 @@ describe('Producer', function () {
 
   it('returns an error identifting the messages that failed', function (done) {
     sqs.sendMessageBatch.restore();
-    
+
     var failedMessages = [{Id: 'message1'}, {Id: 'message2'}, {Id: 'message3'}];
     sinon.stub(sqs, 'sendMessageBatch').yields(null, {Failed: failedMessages});
-    
+
     producer.send(['message1', 'message2', 'message3'], function (err) {
       assert.equal(err.message, 'Failed to send messages: message1, message2, message3');
       done();
@@ -87,8 +86,8 @@ describe('Producer', function () {
     producer.queueSize(function(err, size) {
        sqs.getQueueAttributes.restore();
        assert.ifError(err);
-       assert.strictEqual(size, parseInt(expected));         
+       assert.strictEqual(size, parseInt(expected));
        done();
-    });  
+    });
   });
 });
