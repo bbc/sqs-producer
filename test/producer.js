@@ -23,7 +23,7 @@ describe('Producer', function () {
     sqs.sendMessageBatch.restore();
   });
 
-  it('sends messages as a batch', function (done) {
+  it('sends string messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
         { Id: 'message1', MessageBody: 'message1' },
@@ -33,6 +33,45 @@ describe('Producer', function () {
     };
 
     producer.send(['message1', 'message2'], function (err) {
+      assert.ifError(err);
+      sinon.assert.calledOnce(sqs.sendMessageBatch);
+      sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+      done();
+    });
+  });
+
+  it('sends object messages as a batch', function (done) {
+    var expectedParams = {
+      Entries: [
+        { Id: 'id1', MessageBody: 'body1' },
+        { Id: 'id2', MessageBody: 'body2' }
+      ],
+      QueueUrl: queueUrl
+    };
+
+    var message1 = { id: 'id1', body: 'body1' };
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send([message1, message2], function (err) {
+      assert.ifError(err);
+      sinon.assert.calledOnce(sqs.sendMessageBatch);
+      sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+      done();
+    });
+  });
+
+  it('sends both string and object messages as a batch', function (done) {
+    var expectedParams = {
+      Entries: [
+        { Id: 'message1', MessageBody: 'message1' },
+        { Id: 'id2', MessageBody: 'body2' }
+      ],
+      QueueUrl: queueUrl
+    };
+
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send(['message1', message2], function (err) {
       assert.ifError(err);
       sinon.assert.calledOnce(sqs.sendMessageBatch);
       sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
@@ -56,6 +95,30 @@ describe('Producer', function () {
 
     producer.send(['foo'], function (err) {
       assert.equal(err, sqsError);
+      done();
+    });
+  });
+
+  it('returns an error when messages are neither strings nor objects', function (done) {
+    var errMessage = 'A message can either be an object or a string';
+
+    var message1 = { id: 'id1', body: 'body1' };
+    var message2 = function() {};
+
+    producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages are not of shape {id, body}', function (done) {
+    var errMessage = 'Object messages must have \'id\' and \'body\' props';
+
+    var message1 = { notId: 'notId1', body: 'body1' };
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
       done();
     });
   });
