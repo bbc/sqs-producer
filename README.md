@@ -32,6 +32,14 @@ producer.queueSize(function (err, size) {
   console.log('There are', size, 'messages on the queue.');
 });
 
+// send a message to the queue with a specific ID (by default the body is used as the ID)
+producer.send([{
+  id: 'id1',
+  body: 'Hello world'
+}], function(err) {
+  if (err) console.log(err);
+});
+
 ```
 
 ## Test
