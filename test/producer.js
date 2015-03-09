@@ -60,6 +60,38 @@ describe('Producer', function () {
     });
   });
 
+  it('sends object messages with attributes as a batch', function (done) {
+    var expectedParams = {
+      Entries: [
+        {
+          Id: 'id1',
+          MessageBody: 'body1',
+          MessageAttributes: {
+            attr1: { DataType: 'String', StringValue: 'value1' }
+          }
+        },
+        { Id: 'id2', MessageBody: 'body2' }
+      ],
+      QueueUrl: queueUrl
+    };
+
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      messageAttributes: {
+        attr1: { DataType: 'String', StringValue: 'value1' }
+      }
+    };
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send([message1, message2], function (err) {
+      assert.ifError(err);
+      sinon.assert.calledOnce(sqs.sendMessageBatch);
+      sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+      done();
+    });
+  });
+
   it('sends object messages with delaySeconds param as a batch', function (done) {
     var expectedParams = {
       Entries: [
@@ -147,6 +179,40 @@ describe('Producer', function () {
     var errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
 
     var message1 = { id: 'id1', body: 'body1', delaySeconds: 12345678 };
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages attributes don\'t have a DataType param', function (done) {
+    var errMessage = 'A MessageAttribute must have a DataType key';
+
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      messageAttributes: { attr1: { StringValue: 'value1' } }
+    };
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages attributes have an invalid DataType param', function (done) {
+    var errMessage = 'The DataType key of a MessageAttribute must be a String';
+
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      messageAttributes: {
+        attr1: { DataType: [ 'wrong' ], StringValue: 'value1' }
+      }
+    };
     var message2 = { id: 'id2', body: 'body2' };
 
     producer.send(['foo', message1, message2], function (err) {
