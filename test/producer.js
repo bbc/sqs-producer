@@ -60,6 +60,26 @@ describe('Producer', function () {
     });
   });
 
+  it('sends object messages with delaySeconds param as a batch', function (done) {
+    var expectedParams = {
+      Entries: [
+        { Id: 'id1', MessageBody: 'body1', DelaySeconds: 2 },
+        { Id: 'id2', MessageBody: 'body2', DelaySeconds: 3 }
+      ],
+      QueueUrl: queueUrl
+    };
+
+    var message1 = { id: 'id1', body: 'body1', delaySeconds: 2 };
+    var message2 = { id: 'id2', body: 'body2', delaySeconds: 3 };
+
+    producer.send([message1, message2], function (err) {
+      assert.ifError(err);
+      sinon.assert.calledOnce(sqs.sendMessageBatch);
+      sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+      done();
+    });
+  });
+
   it('sends both string and object messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
@@ -104,6 +124,30 @@ describe('Producer', function () {
 
     var message1 = { id: 'id1', body: 'body1' };
     var message2 = function() {};
+
+    producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages have invalid delaySeconds params 1', function (done) {
+    var errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
+
+    var message1 = { id: 'id1', body: 'body1', delaySeconds: 'typo' };
+    var message2 = { id: 'id2', body: 'body2' };
+
+    producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages have invalid delaySeconds params 2', function (done) {
+    var errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
+
+    var message1 = { id: 'id1', body: 'body1', delaySeconds: 12345678 };
+    var message2 = { id: 'id2', body: 'body2' };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
