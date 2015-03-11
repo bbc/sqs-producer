@@ -40,6 +40,27 @@ producer.send([{
   if (err) console.log(err);
 });
 
+// send a message to the queue with
+// - delaySeconds (must be an number contained within 0 and 900)
+// - messageAttributes (only string DataType supported for now)
+producer.send([
+  {
+    id: 'id1',
+    body: 'Hello world with two string attributes: attr1 and attr2',
+    messageAttributes: {
+      attr1: { DataType: 'String', StringValue: 'value1' }
+      attr2: { DataType: 'String', StringValue: 'value2' }
+    }
+  },
+  {
+    id: 'id2',
+    body: 'Hello world delayed by 5 seconds',
+    delaySeconds: 5
+  }
+], function(err) {
+  if (err) console.log(err);
+});
+
 ```
 
 ## Test
