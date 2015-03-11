@@ -42,14 +42,14 @@ producer.send([{
 
 // send a message to the queue with
 // - delaySeconds (must be an number contained within 0 and 900)
-// - messageAttributes (only string DataType supported for now)
+// - messageAttributes
 producer.send([
   {
     id: 'id1',
     body: 'Hello world with two string attributes: attr1 and attr2',
     messageAttributes: {
-      attr1: { DataType: 'String', StringValue: 'value1' }
-      attr2: { DataType: 'String', StringValue: 'value2' }
+      attr1: { DataType: 'String', StringValue: 'stringValue' }
+      attr2: { DataType: 'BinaryValue', BinaryValue: new Buffer('binaryValue') }
     }
   },
   {
