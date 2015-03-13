@@ -10,7 +10,9 @@ describe('Producer', function () {
   var producer;
 
   beforeEach(function () {
-    sinon.stub(sqs, 'sendMessageBatch').yields(null, {Failed: []});
+    sinon.stub(sqs, 'sendMessageBatch').yields(null, {
+      Failed: []
+    });
 
     producer = Producer.create({
       queueUrl: queueUrl,
@@ -26,8 +28,14 @@ describe('Producer', function () {
   it('sends string messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
-        { Id: 'message1', MessageBody: 'message1' },
-        { Id: 'message2', MessageBody: 'message2' }
+        {
+          Id: 'message1',
+          MessageBody: 'message1'
+        },
+        {
+          Id: 'message2',
+          MessageBody: 'message2'
+        }
       ],
       QueueUrl: queueUrl
     };
@@ -43,14 +51,26 @@ describe('Producer', function () {
   it('sends object messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
-        { Id: 'id1', MessageBody: 'body1' },
-        { Id: 'id2', MessageBody: 'body2' }
+        {
+          Id: 'id1',
+          MessageBody: 'body1'
+        },
+        {
+          Id: 'id2',
+          MessageBody: 'body2'
+        }
       ],
       QueueUrl: queueUrl
     };
 
-    var message1 = { id: 'id1', body: 'body1' };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message1 = {
+      id: 'id1',
+      body: 'body1'
+    };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send([message1, message2], function (err) {
       assert.ifError(err);
@@ -67,10 +87,16 @@ describe('Producer', function () {
           Id: 'id1',
           MessageBody: 'body1',
           MessageAttributes: {
-            attr1: { DataType: 'String', StringValue: 'value1' }
+            attr1: {
+              DataType: 'String',
+              StringValue: 'value1'
+            }
           }
         },
-        { Id: 'id2', MessageBody: 'body2' }
+        {
+          Id: 'id2',
+          MessageBody: 'body2'
+        }
       ],
       QueueUrl: queueUrl
     };
@@ -79,10 +105,16 @@ describe('Producer', function () {
       id: 'id1',
       body: 'body1',
       messageAttributes: {
-        attr1: { DataType: 'String', StringValue: 'value1' }
+        attr1: {
+          DataType: 'String',
+          StringValue: 'value1'
+        }
       }
     };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send([message1, message2], function (err) {
       assert.ifError(err);
@@ -95,14 +127,30 @@ describe('Producer', function () {
   it('sends object messages with delaySeconds param as a batch', function (done) {
     var expectedParams = {
       Entries: [
-        { Id: 'id1', MessageBody: 'body1', DelaySeconds: 2 },
-        { Id: 'id2', MessageBody: 'body2', DelaySeconds: 3 }
+        {
+          Id: 'id1',
+          MessageBody: 'body1',
+          DelaySeconds: 2
+        },
+        {
+          Id: 'id2',
+          MessageBody: 'body2',
+          DelaySeconds: 3
+        }
       ],
       QueueUrl: queueUrl
     };
 
-    var message1 = { id: 'id1', body: 'body1', delaySeconds: 2 };
-    var message2 = { id: 'id2', body: 'body2', delaySeconds: 3 };
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      delaySeconds: 2
+    };
+    var message2 = {
+      id: 'id2',
+      body: 'body2',
+      delaySeconds: 3
+    };
 
     producer.send([message1, message2], function (err) {
       assert.ifError(err);
@@ -115,13 +163,22 @@ describe('Producer', function () {
   it('sends both string and object messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
-        { Id: 'message1', MessageBody: 'message1' },
-        { Id: 'id2', MessageBody: 'body2' }
+        {
+          Id: 'message1',
+          MessageBody: 'message1'
+        },
+        {
+          Id: 'id2',
+          MessageBody: 'body2'
+        }
       ],
       QueueUrl: queueUrl
     };
 
-    var message2 = { id: 'id2', body: 'body2' };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['message1', message2], function (err) {
       assert.ifError(err);
@@ -154,8 +211,11 @@ describe('Producer', function () {
   it('returns an error when messages are neither strings nor objects', function (done) {
     var errMessage = 'A message can either be an object or a string';
 
-    var message1 = { id: 'id1', body: 'body1' };
-    var message2 = function() {};
+    var message1 = {
+      id: 'id1',
+      body: 'body1'
+    };
+    var message2 = function () {};
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -166,8 +226,15 @@ describe('Producer', function () {
   it('returns an error when object messages have invalid delaySeconds params 1', function (done) {
     var errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
 
-    var message1 = { id: 'id1', body: 'body1', delaySeconds: 'typo' };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      delaySeconds: 'typo'
+    };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -178,8 +245,15 @@ describe('Producer', function () {
   it('returns an error when object messages have invalid delaySeconds params 2', function (done) {
     var errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
 
-    var message1 = { id: 'id1', body: 'body1', delaySeconds: 12345678 };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      delaySeconds: 12345678
+    };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -193,9 +267,16 @@ describe('Producer', function () {
     var message1 = {
       id: 'id1',
       body: 'body1',
-      messageAttributes: { attr1: { StringValue: 'value1' } }
+      messageAttributes: {
+        attr1: {
+          StringValue: 'value1'
+        }
+      }
     };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -210,10 +291,16 @@ describe('Producer', function () {
       id: 'id1',
       body: 'body1',
       messageAttributes: {
-        attr1: { DataType: [ 'wrong' ], StringValue: 'value1' }
+        attr1: {
+          DataType: ['wrong'],
+          StringValue: 'value1'
+        }
       }
     };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -224,8 +311,14 @@ describe('Producer', function () {
   it('returns an error when object messages are not of shape {id, body}', function (done) {
     var errMessage = 'Object messages must have \'id\' and \'body\' props';
 
-    var message1 = { noId: 'noId1', body: 'body1' };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message1 = {
+      noId: 'noId1',
+      body: 'body1'
+    };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -236,8 +329,14 @@ describe('Producer', function () {
   it('returns an error when object messages are not of shape {id, body} 2', function (done) {
     var errMessage = 'Object messages must have \'id\' and \'body\' props';
 
-    var message1 = { id: 'id1', noBody: 'noBody1' };
-    var message2 = { id: 'id2', body: 'body2' };
+    var message1 = {
+      id: 'id1',
+      noBody: 'noBody1'
+    };
+    var message2 = {
+      id: 'id2',
+      body: 'body2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -248,8 +347,14 @@ describe('Producer', function () {
   it('returns an error when object messages are not of shape {id, body} 3', function (done) {
     var errMessage = 'Object messages must have \'id\' and \'body\' props';
 
-    var message1 = { id: 'id1', body: 'body1' };
-    var message2 = { noId: 'noId2', noBody: 'noBody2' };
+    var message1 = {
+      id: 'id1',
+      body: 'body1'
+    };
+    var message2 = {
+      noId: 'noId2',
+      noBody: 'noBody2'
+    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -260,8 +365,16 @@ describe('Producer', function () {
   it('returns an error identifting the messages that failed', function (done) {
     sqs.sendMessageBatch.restore();
 
-    var failedMessages = [{Id: 'message1'}, {Id: 'message2'}, {Id: 'message3'}];
-    sinon.stub(sqs, 'sendMessageBatch').yields(null, {Failed: failedMessages});
+    var failedMessages = [{
+      Id: 'message1'
+    }, {
+      Id: 'message2'
+    }, {
+      Id: 'message3'
+    }];
+    sinon.stub(sqs, 'sendMessageBatch').yields(null, {
+      Failed: failedMessages
+    });
 
     producer.send(['message1', 'message2', 'message3'], function (err) {
       assert.equal(err.message, 'Failed to send messages: message1, message2, message3');
@@ -269,7 +382,7 @@ describe('Producer', function () {
     });
   });
 
-  it('returns the approximate size of the queue', function(done) {
+  it('returns the approximate size of the queue', function (done) {
     var expected = '10';
     sinon.stub(sqs, 'getQueueAttributes').withArgs({
       QueueUrl: queueUrl,
@@ -280,11 +393,11 @@ describe('Producer', function () {
       }
     });
 
-    producer.queueSize(function(err, size) {
-       sqs.getQueueAttributes.restore();
-       assert.ifError(err);
-       assert.strictEqual(size, parseInt(expected));
-       done();
+    producer.queueSize(function (err, size) {
+      sqs.getQueueAttributes.restore();
+      assert.ifError(err);
+      assert.strictEqual(size, parseInt(expected));
+      done();
     });
   });
 });
