@@ -48,6 +48,25 @@ describe('Producer', function () {
     });
   });
 
+  it('accepts a single message instead of an array', function (done) {
+    var expectedParams = {
+      Entries: [
+        {
+          Id: 'message1',
+          MessageBody: 'message1'
+        }
+      ],
+      QueueUrl: queueUrl
+    };
+
+    producer.send('message1', function (err) {
+      assert.ifError(err);
+      sinon.assert.calledOnce(sqs.sendMessageBatch);
+      sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+      done();
+    });
+  });
+
   it('sends object messages as a batch', function (done) {
     var expectedParams = {
       Entries: [
