@@ -8,7 +8,7 @@ Enqueues messages onto a given SQS queue
 ## Installation
 
 ```
-npm install BBC/sqs-producer --save
+npm install sqs-producer --save
 ```
 ## Usage
 
