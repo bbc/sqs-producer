@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BBC/sqs-producer.git"
+    "url": "https://github.com/bbc/sqs-producer.git"
   },
   "author": "ibl-team@lists.forge.bbc.co.uk",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BBC/sqs-producer/issues"
+    "url": "https://github.com/bbc/sqs-producer/issues"
   },
   "keywords": [
     "aws",
@@ -24,7 +24,7 @@
     "producer",
     "queue"
   ],
-  "homepage": "https://github.com/BBC/sqs-producer",
+  "homepage": "https://github.com/bbc/sqs-producer",
   "dependencies": {
     "aws-sdk": "^2.1.2",
     "selectn": "^0.9.6",
