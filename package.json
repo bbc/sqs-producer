@@ -27,7 +27,7 @@
   "homepage": "https://github.com/bbc/sqs-producer",
   "dependencies": {
     "aws-sdk": "^2.1.2",
-    "selectn": "^0.9.6",
+    "selectn": "^1.0.3",
     "sinon": "^1.12.2"
   },
   "devDependencies": {
