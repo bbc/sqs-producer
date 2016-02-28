@@ -48,8 +48,8 @@ producer.send([
     id: 'id1',
     body: 'Hello world with two string attributes: attr1 and attr2',
     messageAttributes: {
-      attr1: { DataType: 'String', StringValue: 'stringValue' }
-      attr2: { DataType: 'BinaryValue', BinaryValue: new Buffer('binaryValue') }
+      attr1: { DataType: 'String', StringValue: 'stringValue' },
+      attr2: { DataType: 'Binary', BinaryValue: new Buffer('binaryValue') }
     }
   },
   {
