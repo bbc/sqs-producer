@@ -27,10 +27,10 @@
   "homepage": "https://github.com/bbc/sqs-producer",
   "dependencies": {
     "aws-sdk": "^2.1.2",
-    "selectn": "^1.0.4",
-    "sinon": "^1.12.2"
+    "selectn": "^1.0.4"
   },
   "devDependencies": {
+    "sinon": "^1.12.2",
     "codeclimate-test-reporter": "^0.3.0",
     "istanbul": "^0.3.5",
     "jscoverage": "^0.5.9",
