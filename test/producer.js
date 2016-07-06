@@ -14,7 +14,7 @@ describe('Producer', function () {
       Failed: []
     });
 
-    producer = Producer.create({
+    producer = new Producer({
       queueUrl: queueUrl,
       sqs: sqs
     });
@@ -418,5 +418,15 @@ describe('Producer', function () {
       assert.strictEqual(size, parseInt(expected));
       done();
     });
+  });
+
+  describe('.create', function () {
+      it('creates a new instance of a Producer', function () {
+        var producer = Producer.create({
+          queueUrl: queueUrl,
+          sqs: sqs
+        });
+        assert(producer instanceof Producer);
+      });
   });
 });
