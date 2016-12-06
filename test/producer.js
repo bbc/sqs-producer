@@ -358,29 +358,6 @@ describe('Producer', function () {
       body: 'body1',
       deduplicationId: 1234
     };
-    var message2 = {
-      noId: 'noId2',
-      noBody: 'noBody2',
-    };
-
-    producer.send(['foo', message1, message2], function (err) {
-      assert.equal(err.message, errMessage);
-      done();
-    });
-  });
-
-  it('returns an error when object messages have either FIFO queue params but not both', function (done) {
-    var errMessage = 'Both Message.groupId and Message.deduplicationId required for FIFO queues';
-
-    var message1 = {
-      id: 'id1',
-      body: 'body1',
-      deduplicationId: '1234'
-    };
-    var message2 = {
-      noId: 'noId2',
-      noBody: 'noBody2',
-    };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
