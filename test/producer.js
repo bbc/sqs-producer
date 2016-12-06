@@ -339,12 +339,8 @@ describe('Producer', function () {
       body: 'body1',
       groupId: 1234
     };
-    var message2 = {
-      noId: 'noId2',
-      noBody: 'noBody2',
-    };
 
-    producer.send(['foo', message1, message2], function (err) {
+    producer.send(message1, function (err) {
       assert.equal(err.message, errMessage);
       done();
     });
@@ -359,7 +355,7 @@ describe('Producer', function () {
       deduplicationId: 1234
     };
 
-    producer.send(['foo', message1, message2], function (err) {
+    producer.send(message1, function (err) {
       assert.equal(err.message, errMessage);
       done();
     });
