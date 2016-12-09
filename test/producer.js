@@ -143,18 +143,20 @@ describe('Producer', function () {
     });
   });
 
-  it('sends object messages with delaySeconds param as a batch', function (done) {
+  it('sends object messages with FIFO params as a batch', function (done) {
     var expectedParams = {
       Entries: [
         {
           Id: 'id1',
           MessageBody: 'body1',
-          DelaySeconds: 2
+          DelaySeconds: 2,
+          MessageGroupId: 'group1'
         },
         {
           Id: 'id2',
           MessageBody: 'body2',
-          DelaySeconds: 3
+          DelaySeconds: 3,
+          MessageGroupId: 'group2'
         }
       ],
       QueueUrl: queueUrl
@@ -163,12 +165,14 @@ describe('Producer', function () {
     var message1 = {
       id: 'id1',
       body: 'body1',
-      delaySeconds: 2
+      delaySeconds: 2,
+      groupId: 'group1'
     };
     var message2 = {
       id: 'id2',
       body: 'body2',
-      delaySeconds: 3
+      delaySeconds: 3,
+      groupId: 'group2'
     };
 
     producer.send([message1, message2], function (err) {
@@ -322,6 +326,36 @@ describe('Producer', function () {
     };
 
     producer.send(['foo', message1, message2], function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages have invalid queueId param', function (done) {
+    var errMessage = 'Message.groupId value must be a string';
+
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      groupId: 1234
+    };
+
+    producer.send(message1, function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+
+  it('returns an error when object messages have invalid deduplicationId param', function (done) {
+    var errMessage = 'Message.deduplicationId value must be a string';
+
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      deduplicationId: 1234
+    };
+
+    producer.send(message1, function (err) {
       assert.equal(err.message, errMessage);
       done();
     });
