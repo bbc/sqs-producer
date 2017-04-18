@@ -30,7 +30,7 @@
     "lodash": "^4.11.2"
   },
   "devDependencies": {
-    "sinon": "^1.12.2",
+    "sinon": "^1.17.4",
     "codeclimate-test-reporter": "^0.3.0",
     "istanbul": "^0.4.3",
     "jscoverage": "^0.5.9",
