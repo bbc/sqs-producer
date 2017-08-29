@@ -1,54 +1,54 @@
 {
-  "name": "sqs-producer",
-  "version": "1.5.0",
-  "description": "Enqueues messages onto a given SQS queue",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R dot && open coverage/lcov-report/index.html",
-    "lint": "jshint .",
-    "lcov": "istanbul cover _mocha -- -R dot"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bbc/sqs-producer.git"
-  },
-  "author": "ibl-team@lists.forge.bbc.co.uk",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bbc/sqs-producer/issues"
-  },
-  "keywords": [
+    "name": "sqs-producer",
+    "version": "1.5.0",
+    "description": "Enqueues messages onto a given SQS queue",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha",
+        "coverage": "istanbul cover _mocha -- -R dot && open coverage/lcov-report/index.html",
+        "lint": "jshint .",
+        "lcov": "istanbul cover _mocha -- -R dot"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bbc/sqs-producer.git"
+    },
+    "author": "ibl-team@lists.forge.bbc.co.uk",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/bbc/sqs-producer/issues"
+    },
+    "keywords": [
     "aws",
     "sqs",
     "producer",
     "queue"
   ],
-  "homepage": "https://github.com/bbc/sqs-producer",
-  "dependencies": {
-    "aws-sdk": "^2.1.2",
-    "lodash": "^4.11.2"
-  },
-  "devDependencies": {
-    "sinon": "^1.12.2",
-    "codeclimate-test-reporter": "^0.3.0",
-    "istanbul": "^0.4.3",
-    "jscoverage": "^0.5.9",
-    "jshint": "^2.5.10",
-    "mocha": "^2.0.1"
-  },
-  "jshintConfig": {
-    "quotmark": "single",
-    "unused": true,
-    "undef": true,
-    "node": true,
-    "globals": {
-      "describe": false,
-      "it": false,
-      "before": false,
-      "beforeEach": false,
-      "after": false,
-      "afterEach": false
+    "homepage": "https://github.com/bbc/sqs-producer",
+    "dependencies": {
+        "aws-sdk": "^2.1.2",
+        "lodash": "^4.11.2"
+    },
+    "devDependencies": {
+        "sinon": "^1.12.2",
+        "codeclimate-test-reporter": "^0.3.0",
+        "istanbul": "^0.4.3",
+        "jscoverage": "^0.5.9",
+        "jshint": "^2.5.10",
+        "mocha": "^2.0.1"
+    },
+    "jshintConfig": {
+        "quotmark": "single",
+        "unused": true,
+        "undef": true,
+        "node": true,
+        "globals": {
+            "describe": false,
+            "it": false,
+            "before": false,
+            "beforeEach": false,
+            "after": false,
+            "afterEach": false
+        }
     }
-  }
 }
