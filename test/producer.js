@@ -337,8 +337,7 @@ describe('Producer', function () {
     var message1 = {
       id: 'id1',
       body: 'body1',
-      groupId: 1234,
-      deduplicationId: '1234'
+      groupId: 1234
     };
 
     producer.send(message1, function (err) {
@@ -364,27 +363,12 @@ describe('Producer', function () {
   });
   
   it('returns an error when fifo messages have no groupId param', function (done) {
-    var errMessage = 'FIFO Queue messages must have \'groupId\' and \'deduplicationId\' props';
+    var errMessage = 'FIFO Queue messages must have \'groupId\' prop';
 
     var message1 = {
       id: 'id1',
       body: 'body1',
       deduplicationId: '1234'
-    };
-
-    producer.send(message1, function (err) {
-      assert.equal(err.message, errMessage);
-      done();
-    });
-  });
-
-  it('returns an error when fifo messages have no deduplicationId param', function (done) {
-    var errMessage = 'FIFO Queue messages must have \'groupId\' and \'deduplicationId\' props';
-
-    var message1 = {
-      id: 'id1',
-      body: 'body1',
-      groupId: '1234',
     };
 
     producer.send(message1, function (err) {
