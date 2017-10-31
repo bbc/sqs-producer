@@ -331,7 +331,21 @@ describe('Producer', function () {
     });
   });
 
-  it('returns an error when object messages have invalid queueId param', function (done) {
+  it('returns an error when object messages have invalid id param', function (done) {
+    var errMessage = 'Message.id value must be a string';
+
+    var message1 = {
+      id: 1234,
+      body: 'body1'
+    };
+
+    producer.send(message1, function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+  
+  it('returns an error when object messages have invalid groupId param', function (done) {
     var errMessage = 'Message.groupId value must be a string';
 
     var message1 = {
@@ -352,7 +366,23 @@ describe('Producer', function () {
     var message1 = {
       id: 'id1',
       body: 'body1',
+      groupId: '1234',
       deduplicationId: 1234
+    };
+
+    producer.send(message1, function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+  
+  it('returns an error when fifo messages have no groupId param', function (done) {
+    var errMessage = 'FIFO Queue messages must have \'groupId\' prop';
+
+    var message1 = {
+      id: 'id1',
+      body: 'body1',
+      deduplicationId: '1234'
     };
 
     producer.send(message1, function (err) {
@@ -362,7 +392,7 @@ describe('Producer', function () {
   });
 
   it('returns an error when object messages are not of shape {id, body}', function (done) {
-    var errMessage = 'Object messages must have \'id\' and \'body\' props';
+    var errMessage = 'Object messages must have \'id\' prop';
 
     var message1 = {
       noId: 'noId1',
@@ -380,7 +410,7 @@ describe('Producer', function () {
   });
 
   it('returns an error when object messages are not of shape {id, body} 2', function (done) {
-    var errMessage = 'Object messages must have \'id\' and \'body\' props';
+    var errMessage = 'Object messages must have \'body\' prop';
 
     var message1 = {
       id: 'id1',
@@ -389,24 +419,6 @@ describe('Producer', function () {
     var message2 = {
       id: 'id2',
       body: 'body2'
-    };
-
-    producer.send(['foo', message1, message2], function (err) {
-      assert.equal(err.message, errMessage);
-      done();
-    });
-  });
-
-  it('returns an error when object messages are not of shape {id, body} 3', function (done) {
-    var errMessage = 'Object messages must have \'id\' and \'body\' props';
-
-    var message1 = {
-      id: 'id1',
-      body: 'body1'
-    };
-    var message2 = {
-      noId: 'noId2',
-      noBody: 'noBody2'
     };
 
     producer.send(['foo', message1, message2], function (err) {
