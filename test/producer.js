@@ -331,6 +331,20 @@ describe('Producer', function () {
     });
   });
 
+  it('returns an error when object messages have invalid id param', function (done) {
+    var errMessage = 'Message.id value must be a string';
+
+    var message1 = {
+      id: 1234,
+      body: 'body1'
+    };
+
+    producer.send(message1, function (err) {
+      assert.equal(err.message, errMessage);
+      done();
+    });
+  });
+  
   it('returns an error when object messages have invalid groupId param', function (done) {
     var errMessage = 'Message.groupId value must be a string';
 
