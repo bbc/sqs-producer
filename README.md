@@ -15,9 +15,18 @@ npm install sqs-producer --save
 ```js
 var Producer = require('sqs-producer');
 
+// create simple consumer
 var producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
   region: 'eu-west-1'
+});
+
+// create custom producer (supporting all opts as per the API docs: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property)
+var producer = Producer.create({
+  queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
+  region: 'eu-west-1'
+  accessKeyId: 'yourAccessKey',
+  secretAccessKey: 'yourSecret'
 });
 
 // send messages to the queue
