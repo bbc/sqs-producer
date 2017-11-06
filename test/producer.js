@@ -33,7 +33,7 @@ describe('Producer', function () {
           MessageBody: 'message1'
         },
         {
-          Id: 'message2',
+          Id: '1',
           MessageBody: 'message2'
         }
       ],
