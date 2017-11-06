@@ -29,7 +29,7 @@ describe('Producer', function () {
     var expectedParams = {
       Entries: [
         {
-          Id: 'message1',
+          Id: '0',
           MessageBody: 'message1'
         },
         {
@@ -52,7 +52,7 @@ describe('Producer', function () {
     var expectedParams = {
       Entries: [
         {
-          Id: 'message1',
+          Id: '0',
           MessageBody: 'message1'
         }
       ],
@@ -187,7 +187,7 @@ describe('Producer', function () {
     var expectedParams = {
       Entries: [
         {
-          Id: 'message1',
+          Id: '0',
           MessageBody: 'message1'
         },
         {
