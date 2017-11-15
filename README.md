@@ -15,7 +15,7 @@ npm install sqs-producer --save
 ```js
 var Producer = require('sqs-producer');
 
-// create simple consumer
+// create simple producer
 var producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
   region: 'eu-west-1'
