@@ -1,7 +1,10 @@
 sqs-producer
 ====================
 
-[![Build Status](https://travis-ci.org/bbc/sqs-producer.svg?branch=master)](https://travis-ci.org/bbc/sqs-producer?branch=master) [![Code Climate](https://codeclimate.com/github/BBC/sqs-producer/badges/gpa.svg)](https://codeclimate.com/github/BBC/sqs-producer) [![Test Coverage](https://codeclimate.com/github/BBC/sqs-producer/badges/coverage.svg)](https://codeclimate.com/github/BBC/sqs-producer)
+[![NPM downloads](https://img.shields.io/npm/dm/sqs-producer.svg?style=flat)](https://npmjs.org/package/sqs-producer)
+[![Build Status](https://travis-ci.org/bbc/sqs-producer.svg?branch=master)](https://travis-ci.org/bbc/sqs-producer?branch=master) 
+[![Code Climate](https://codeclimate.com/github/BBC/sqs-producer/badges/gpa.svg)](https://codeclimate.com/github/BBC/sqs-producer) 
+[![Test Coverage](https://codeclimate.com/github/BBC/sqs-producer/badges/coverage.svg)](https://codeclimate.com/github/BBC/sqs-producer)
 
 Enqueues messages onto a given SQS queue
 
