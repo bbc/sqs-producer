@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "coverage":
-      "istanbul cover _mocha -- -R dot && open coverage/lcov-report/index.html",
+    "coverage": "istanbul cover _mocha -- -R dot && open coverage/lcov-report/index.html",
     "lint": "jshint .",
     "lcov": "istanbul cover _mocha -- -R dot"
   },
@@ -18,10 +17,15 @@
   "bugs": {
     "url": "https://github.com/bbc/sqs-producer/issues"
   },
-  "keywords": ["aws", "sqs", "producer", "queue"],
+  "keywords": [
+    "aws",
+    "sqs",
+    "producer",
+    "queue"
+  ],
   "homepage": "https://github.com/bbc/sqs-producer",
   "dependencies": {
-    "aws-sdk": "^2.152.0",
+    "aws-sdk": "^2.393.0",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
