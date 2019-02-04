@@ -1,4 +1,5 @@
 node_modules
 coverage.html
 lib-cov
-coverage
+coverage/
+.nyc_output/
