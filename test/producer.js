@@ -11,7 +11,8 @@ describe('Producer', function () {
 
   beforeEach(function () {
     sinon.stub(sqs, 'sendMessageBatch').yields(null, {
-      Failed: []
+      Failed: [],
+      Successful: [],
     });
 
     producer = new Producer({
@@ -59,10 +60,12 @@ describe('Producer', function () {
       QueueUrl: queueUrl
     };
 
-    producer.send('message1', function (err) {
+    producer.send('message1', function (err, result) {
       assert.ifError(err);
       sinon.assert.calledOnce(sqs.sendMessageBatch);
       sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+
+      console.log(result);
       done();
     });
   });
@@ -231,6 +234,39 @@ describe('Producer', function () {
     });
   });
 
+  it('returns an AWS response', function (done) {
+    var expectedResult = [{
+      Id: 'bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b',
+      MessageId: 'd6f79694-bb5c-4cd7-bb39-3110ed744293',
+      MD5OfMessageBody: '2f6fa42e801b4a6e4fd58a96f4f59840',
+      MD5OfMessageAttributes: '8c229d10c5effd188ae1eef62fc3ffec'
+    }];
+
+    var response = {
+      ResponseMetadata: {
+        RequestId: "2e7c4a19-d74c-55ee-9dfb-1fe99f6fc65a"
+      },
+      Successful: [
+        {
+          Id: "bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b",
+          MessageId: "d6f79694-bb5c-4cd7-bb39-3110ed744293",
+          MD5OfMessageBody: "2f6fa42e801b4a6e4fd58a96f4f59840",
+          MD5OfMessageAttributes: "8c229d10c5effd188ae1eef62fc3ffec",
+        }
+      ],
+      Failed: []
+    };
+
+    sqs.sendMessageBatch.restore();
+    sinon.stub(sqs, 'sendMessageBatch').yields(null, response);
+
+    producer.send(['foo'], function (err, result) {
+      assert.equal(err, null);
+      assert.deepEqual(result, expectedResult);
+      done();
+    });
+  });
+
   it('returns an error when messages are neither strings nor objects', function (done) {
     var errMessage = 'A message can either be an object or a string';
 
@@ -238,7 +274,7 @@ describe('Producer', function () {
       id: 'id1',
       body: 'body1'
     };
-    var message2 = function () {};
+    var message2 = function () { };
 
     producer.send(['foo', message1, message2], function (err) {
       assert.equal(err.message, errMessage);
@@ -344,7 +380,7 @@ describe('Producer', function () {
       done();
     });
   });
-  
+
   it('returns an error when object messages have invalid groupId param', function (done) {
     var errMessage = 'Message.groupId value must be a string';
 
@@ -375,7 +411,7 @@ describe('Producer', function () {
       done();
     });
   });
-  
+
   it('returns an error when fifo messages have no groupId param', function (done) {
     var errMessage = 'FIFO Queue messages must have \'groupId\' prop';
 
@@ -438,7 +474,8 @@ describe('Producer', function () {
       Id: 'message3'
     }];
     sinon.stub(sqs, 'sendMessageBatch').yields(null, {
-      Failed: failedMessages
+      Failed: failedMessages,
+      Successful: [],
     });
 
     producer.send(['message1', 'message2', 'message3'], function (err) {
@@ -467,12 +504,12 @@ describe('Producer', function () {
   });
 
   describe('.create', function () {
-      it('creates a new instance of a Producer', function () {
-        var producer = Producer.create({
-          queueUrl: queueUrl,
-          sqs: sqs
-        });
-        assert(producer instanceof Producer);
+    it('creates a new instance of a Producer', function () {
+      var producer = Producer.create({
+        queueUrl: queueUrl,
+        sqs: sqs
       });
+      assert(producer instanceof Producer);
+    });
   });
 });
