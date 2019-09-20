@@ -65,7 +65,6 @@ describe('Producer', function () {
       sinon.assert.calledOnce(sqs.sendMessageBatch);
       sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
 
-      console.log(result);
       done();
     });
   });
