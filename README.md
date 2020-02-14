@@ -84,7 +84,7 @@ await producer.send({
 
 ### v2.0
 
-- No logic changes
+- No logic or API changes (except the migration from callbacks to promises)
 
 #### BREAKING
 

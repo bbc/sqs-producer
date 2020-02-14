@@ -26,6 +26,15 @@ describe('Producer', function () {
     sqs.sendMessageBatch.restore();
   });
 
+  async function rejects(promise, errMessage) {
+    try {
+      await promise;
+      assert.fail(`should have thrown: ${errMessage}`);
+    } catch (err) {
+      assert.equal(err.message, errMessage);
+    }
+  }
+
   it('sends string messages as a batch', async () => {
     const expectedParams = {
       Entries: [
@@ -200,19 +209,14 @@ describe('Producer', function () {
   });
 
   it('returns an error when SQS fails', async () => {
-    const sqsError = new Error('sqs failed');
+    const errMessage = 'sqs failed';
 
     sqs.sendMessageBatch.restore();
     sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.reject(sqsError))
+      promise: () => (Promise.reject(new Error(errMessage)))
     });
 
-    try {
-      await producer.send(['foo']);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err, sqsError);
-    }
+    await rejects(producer.send(['foo']), errMessage);
   });
 
   it('returns an error when messages are neither strings nor objects', async () => {
@@ -224,12 +228,7 @@ describe('Producer', function () {
     };
     const message2 = function () {};
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error when object messages have invalid delaySeconds params 1', async () => {
@@ -245,12 +244,7 @@ describe('Producer', function () {
       body: 'body2'
     };
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error when object messages have invalid delaySeconds params 2', async () => {
@@ -266,15 +260,10 @@ describe('Producer', function () {
       body: 'body2'
     };
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
-  it('returns an error when object messages attributes don\'t have a DataType param', async () => {
+  it("returns an error when object messages attributes don't have a DataType param", async () => {
     const errMessage = 'A MessageAttribute must have a DataType key';
 
     const message1 = {
@@ -291,12 +280,7 @@ describe('Producer', function () {
       body: 'body2'
     };
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error when object messages attributes have an invalid DataType param', async () => {
@@ -317,12 +301,7 @@ describe('Producer', function () {
       body: 'body2'
     };
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error when object messages have invalid id param', async () => {
@@ -333,12 +312,7 @@ describe('Producer', function () {
       body: 'body1'
     };
 
-    try {
-      await producer.send(message1);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(message1), errMessage);
   });
 
   it('returns an error when object messages have invalid groupId param', async () => {
@@ -350,12 +324,7 @@ describe('Producer', function () {
       groupId: 1234
     };
 
-    try {
-      await producer.send(message1);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(message1), errMessage);
   });
 
   it('returns an error when object messages have invalid deduplicationId param', async () => {
@@ -368,16 +337,11 @@ describe('Producer', function () {
       deduplicationId: 1234
     };
 
-    try {
-      await producer.send(message1);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(message1), errMessage);
   });
 
   it('returns an error when fifo messages have no groupId param', async () => {
-    const errMessage = 'FIFO Queue messages must have \'groupId\' prop';
+    const errMessage = "FIFO Queue messages must have 'groupId' prop";
 
     const message1 = {
       id: 'id1',
@@ -385,16 +349,11 @@ describe('Producer', function () {
       deduplicationId: '1234'
     };
 
-    try {
-      await producer.send(message1);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(message1), errMessage);
   });
 
   it('returns an error when object messages are not of shape {id, body}', async () => {
-    const errMessage = 'Object messages must have \'id\' prop';
+    const errMessage = "Object messages must have 'id' prop";
 
     const message1 = {
       noId: 'noId1',
@@ -405,16 +364,11 @@ describe('Producer', function () {
       body: 'body2'
     };
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error when object messages are not of shape {id, body} 2', async () => {
-    const errMessage = 'Object messages must have \'body\' prop';
+    const errMessage = "Object messages must have 'body' prop";
 
     const message1 = {
       id: 'id1',
@@ -425,12 +379,7 @@ describe('Producer', function () {
       body: 'body2'
     };
 
-    try {
-      await producer.send(['foo', message1, message2]);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error identifting the messages that failed', async () => {
@@ -450,12 +399,7 @@ describe('Producer', function () {
       }))
     });
 
-    try {
-      await producer.send(['message1', 'message2', 'message3']);
-      assert.fail("should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-    }
+    await rejects(producer.send(['message1', 'message2', 'message3']), errMessage);
   });
 
   it('returns the approximate size of the queue', async () => {
@@ -471,13 +415,13 @@ describe('Producer', function () {
       }))
     });
 
-    const size = await producer.queueSize(['message1', 'message2', 'message3']);
+    const size = await producer.queueSize();
     sqs.getQueueAttributes.restore();
     assert.strictEqual(size, Number(expected));
   });
 
   describe('.create', function () {
-    it('creates a new instance of a Producer', function () {
+    it('creates a new instance of a Producer', () => {
       const producer = Producer.create({
         queueUrl,
         sqs
