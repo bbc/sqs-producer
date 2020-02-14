@@ -6,8 +6,10 @@
   "scripts": {
     "test": "mocha",
     "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
-    "lint": "jshint .",
-    "lcov": "istanbul cover _mocha -- -R dot"
+    "lint": "eslint '**/**.js'"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   },
   "repository": {
     "type": "git",
@@ -25,28 +27,30 @@
   ],
   "homepage": "https://github.com/bbc/sqs-producer",
   "dependencies": {
-    "aws-sdk": "^2.393.0",
-    "lodash": "^4.17.4"
+    "aws-sdk": "^2.393.0"
   },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.1",
-    "nyc": "^13.1.0",
-    "jshint": "^2.5.10",
+    "eslint": "^6.8.0",
     "mocha": "^5.2.0",
+    "nyc": "^15.0.0",
     "sinon": "^7.2.2"
   },
-  "jshintConfig": {
-    "quotmark": "single",
-    "unused": true,
-    "undef": true,
-    "node": true,
-    "globals": {
-      "describe": false,
-      "it": false,
-      "before": false,
-      "beforeEach": false,
-      "after": false,
-      "afterEach": false
-    }
-  }
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "env": {
+      "es6": true,
+      "node": true,
+      "mocha": true
+    },
+    "extends": "eslint:recommended"
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "lib-cov",
+    ".nyc_output",
+    "coverage"
+  ]
 }
