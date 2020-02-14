@@ -16,46 +16,39 @@ npm install sqs-producer --save
 ## Usage
 
 ```js
-var Producer = require('sqs-producer');
+const Producer = require('sqs-producer');
 
 // create simple producer
-var producer = Producer.create({
+const producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
   region: 'eu-west-1'
 });
 
 // create custom producer (supporting all opts as per the API docs: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property)
-var producer = Producer.create({
+const producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
-  region: 'eu-west-1'
+  region: 'eu-west-1',
   accessKeyId: 'yourAccessKey',
   secretAccessKey: 'yourSecret'
 });
 
 // send messages to the queue
-producer.send(['msg1', 'msg2'], function(err) {
-  if (err) console.log(err);
-});
+await producer.send(['msg1', 'msg2']);
 
 // get the current size of the queue
-producer.queueSize(function (err, size) {
-  if (err) console.log(err);
-
-  console.log('There are', size, 'messages on the queue.');
-});
+const size = await producer.queueSize();
+console.log(`There are ${size} messages on the queue.`);
 
 // send a message to the queue with a specific ID (by default the body is used as the ID)
-producer.send([{
+await producer.send([{
   id: 'id1',
   body: 'Hello world'
-}], function(err) {
-  if (err) console.log(err);
-});
+}]);
 
 // send a message to the queue with
 // - delaySeconds (must be an number contained within 0 and 900)
 // - messageAttributes
-producer.send([
+await producer.send([
   {
     id: 'id1',
     body: 'Hello world with two string attributes: attr1 and attr2',
@@ -69,9 +62,7 @@ producer.send([
     body: 'Hello world delayed by 5 seconds',
     delaySeconds: 5
   }
-], function(err) {
-  if (err) console.log(err);
-});
+]);
 
 // send a message to a FIFO queue
 //
@@ -82,30 +73,41 @@ producer.send([
 // deduplicationId can be excluded if content-based deduplication is enabled
 //
 // http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html
-producer.send({
+await producer.send({
   body: 'Hello world from our FIFO queue!',
   groupId: 'group1234',
   deduplicationId: 'abcdef123456' // typically a hash of the message body
-}, function(err) {
-  if (err) console.log(err);
 });
 ```
 
-## Test
+## Changelog
+
+### v2.0
+
+- No logic changes
+
+#### BREAKING
+
+- no more callbacks, only promises are supported now. Opens road for `async/await` syntax
+- node.js 4, 6 are not supported any more. node.js 8 and above are. 
+
+## Development
+
+### Test
 
 ```
 npm test
 ```
 
-## Coverage
+### Coverage
 For coverage report, run the command:
 
 ```
 npm run coverage
 ```
 
-## JSLint
-To check for problems using JSLint
+### Lint
+To check for problems using ESLint
 
 ```
 npm run lint
