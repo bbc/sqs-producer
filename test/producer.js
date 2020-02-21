@@ -27,12 +27,14 @@ describe('Producer', function () {
   });
 
   async function rejects(promise, errMessage) {
+    let thrown = false;
     try {
       await promise;
-      assert.fail(`should have thrown: ${errMessage}`);
     } catch (err) {
+      thrown = true;
       assert.equal(err.message, errMessage);
     }
+    if (!thrown) assert.fail(`Should have thrown: ${errMessage}`);
   }
 
   it('sends string messages as a batch', async () => {
