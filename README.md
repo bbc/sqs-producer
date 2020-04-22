@@ -27,7 +27,7 @@ var producer = Producer.create({
 // create custom producer (supporting all opts as per the API docs: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property)
 var producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
-  region: 'eu-west-1'
+  region: 'eu-west-1',
   accessKeyId: 'yourAccessKey',
   secretAccessKey: 'yourSecret'
 });
