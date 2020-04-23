@@ -428,7 +428,6 @@ describe('Producer', function () {
         queueUrl,
         sqs
       });
-
       assert(producer instanceof Producer);
     });
   });
