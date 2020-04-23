@@ -428,6 +428,7 @@ describe('Producer', function () {
         queueUrl,
         sqs
       });
+      console.log(Producer.create)
       assert(producer instanceof Producer);
     });
   });
