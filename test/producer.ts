@@ -1,15 +1,15 @@
-const Producer = require('../lib/producer');
-const sinon = require('sinon');
-const assert = require('assert');
+import { assert } from 'chai';
+import * as sinon from 'sinon';
+import { Producer } from '../src/producer';
 
 const AWS = require('aws-sdk');
-let sqs = new AWS.SQS();
+const sqs: any = new AWS.SQS();
 
-describe('Producer', function () {
+describe('Producer', () => {
   const queueUrl = 'https://dummy-queue';
   let producer;
 
-  beforeEach(function () {
+  beforeEach(() => {
     sinon.stub(sqs, 'sendMessageBatch').returns({
       promise: () => (Promise.resolve({
         Failed: []
@@ -22,7 +22,7 @@ describe('Producer', function () {
     });
   });
 
-  afterEach(function () {
+  afterEach(() => {
     sqs.sendMessageBatch.restore();
   });
 
@@ -34,7 +34,7 @@ describe('Producer', function () {
       thrown = true;
       assert.equal(err.message, errMessage);
     }
-    if (!thrown) assert.fail(`Should have thrown: ${errMessage}`);
+    if (!thrown) { assert.fail(`Should have thrown: ${errMessage}`); }
   }
 
   it('sends string messages as a batch', async () => {
@@ -228,7 +228,7 @@ describe('Producer', function () {
       id: 'id1',
       body: 'body1'
     };
-    const message2 = function () {};
+    const message2 = function () { };
 
     await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
@@ -343,7 +343,7 @@ describe('Producer', function () {
   });
 
   it('returns an error when fifo messages have no groupId param', async () => {
-    const errMessage = "FIFO Queue messages must have 'groupId' prop";
+    const errMessage = `FIFO Queue messages must have 'groupId' prop`;
 
     const message1 = {
       id: 'id1',
@@ -355,7 +355,7 @@ describe('Producer', function () {
   });
 
   it('returns an error when object messages are not of shape {id, body}', async () => {
-    const errMessage = "Object messages must have 'id' prop";
+    const errMessage = `Object messages must have 'id' prop`;
 
     const message1 = {
       noId: 'noId1',
@@ -370,7 +370,7 @@ describe('Producer', function () {
   });
 
   it('returns an error when object messages are not of shape {id, body} 2', async () => {
-    const errMessage = "Object messages must have 'body' prop";
+    const errMessage = `Object messages must have 'body' prop`;
 
     const message1 = {
       id: 'id1',
@@ -422,13 +422,13 @@ describe('Producer', function () {
     assert.strictEqual(size, Number(expected));
   });
 
-  describe('.create', function () {
+  describe('.create', () => {
     it('creates a new instance of a Producer', () => {
-      const producer = Producer.create({
+      const producerInstance = Producer.create({
         queueUrl,
         sqs
       });
-      assert(producer instanceof Producer);
+      assert(producerInstance instanceof Producer);
     });
   });
 });

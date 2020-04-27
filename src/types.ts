@@ -1,19 +1,19 @@
 const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
-function entryFromObject(message) {
+function entryFromObject(message: any): any {
     if (!message.body) {
-        throw new Error("Object messages must have 'body' prop");
+        throw new Error(`Object messages must have 'body' prop`);
     }
 
     if (!message.groupId && !message.deduplicationId && !message.id) {
-        throw new Error("Object messages must have 'id' prop");
+        throw new Error(`Object messages must have 'id' prop`);
     }
 
     if (message.deduplicationId && !message.groupId) {
-        throw new Error("FIFO Queue messages must have 'groupId' prop");
+        throw new Error(`FIFO Queue messages must have 'groupId' prop`);
     }
 
-    const entry = {
+    const entry: any = {
         MessageBody: message.body
     };
 
@@ -64,14 +64,14 @@ function entryFromObject(message) {
     return entry;
 }
 
-function entryFromString(message) {
+function entryFromString(message: any): any {
     return {
         Id: message,
         MessageBody: message
     };
 }
 
-function entryFromMessage(message) {
+export function entryFromMessage(message: any): any {
     if (isString(message)) {
         return entryFromString(message);
     } else if (isObject(message)) {
@@ -80,6 +80,3 @@ function entryFromMessage(message) {
 
     throw new Error('A message can either be an object or a string');
 }
-
-
-module.exports = { entryFromMessage }

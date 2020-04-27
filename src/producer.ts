@@ -1,12 +1,24 @@
-const SQS = require('aws-sdk/clients/sqs');
-const { entryFromMessage } = require('./types');
+import { SQS } from 'aws-sdk';
+import { entryFromMessage } from './types';
 const requiredOptions = [
   'queueUrl'
 ];
 
-class Producer {
-  constructor(options) {
-    this.validate(options)
+type Option = {
+  queueUrl?: string;
+  batchSize?: number;
+  sqs?: any;
+  region?: string;
+};
+
+export class Producer {
+  static create: (options: Option) => Producer;
+  queueUrl: string;
+  batchSize: number;
+  sqs: any;
+  region?: string;
+  constructor(options: Option) {
+    this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
     this.sqs = options.sqs || new SQS({
@@ -15,7 +27,7 @@ class Producer {
     });
   }
 
-  validate(options) {
+  validate(options: Option): void {
     for (const option of requiredOptions) {
       if (!options[option]) {
         throw new Error(`Missing SQS producer option [${option}].`);
@@ -26,10 +38,10 @@ class Producer {
     }
   }
 
-  async _sendBatch(failedMessages, messages, startIndex) {
-    const endIndex = startIndex + this.batchSize;
+  async _sendBatch(failedMessages?: any, messages?: any, startIndex?: any): Promise<any> {
+    const endIndex = `${startIndex}${this.batchSize}`;
     const batch = messages.slice(startIndex, endIndex);
-    const params = {
+    const params: any = {
       QueueUrl: this.queueUrl
     };
 
@@ -37,6 +49,7 @@ class Producer {
 
     const result = await this.sqs.sendMessageBatch(params).promise();
 
+    // tslint:disable-next-line: no-parameter-reassignment
     failedMessages = failedMessages.concat(result.Failed.map((entry) => entry.Id));
 
     if (endIndex < messages.length) {
@@ -44,13 +57,13 @@ class Producer {
     }
 
     if (failedMessages.length === 0) {
-      return null;
+      return undefined;
     }
 
     throw new Error(`Failed to send messages: ${failedMessages.join(', ')}`);
   }
 
-  async queueSize() {
+  async queueSize(): Promise<number> {
     const result = await this.sqs.getQueueAttributes({
       QueueUrl: this.queueUrl,
       AttributeNames: ['ApproximateNumberOfMessages']
@@ -59,11 +72,12 @@ class Producer {
     return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
-  send(messages) {
+  async send(messages: any): Promise<any> {
     const failedMessages = [];
     const startIndex = 0;
 
     if (!Array.isArray(messages)) {
+      // tslint:disable-next-line: no-parameter-reassignment
       messages = [messages];
     }
 
@@ -71,8 +85,6 @@ class Producer {
   }
 }
 
-Producer.create = function (options) {
+Producer.create = (options: Option) => {
   return new Producer(options);
 };
-
-module.exports = Producer;
