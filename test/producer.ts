@@ -26,7 +26,7 @@ describe('Producer', () => {
     sqs.sendMessageBatch.restore();
   });
 
-  async function rejects(promise, errMessage) {
+  async function rejects(promise: any, errMessage: any): Promise<any> {
     let thrown = false;
     try {
       await promise;
@@ -228,7 +228,7 @@ describe('Producer', () => {
       id: 'id1',
       body: 'body1'
     };
-    const message2 = function () { };
+    const message2 = () => { };
 
     await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
