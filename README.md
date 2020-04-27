@@ -11,7 +11,7 @@ Enqueues messages onto a given SQS queue
 ## Installation
 
 ```
-npm install sqs-producer --save
+npm install sqs-producer
 ```
 ## Usage
 
