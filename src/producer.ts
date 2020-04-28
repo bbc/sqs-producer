@@ -48,19 +48,16 @@ export class Producer {
     params.Entries = batch.map(entryFromMessage);
 
     const result = await this.sqs.sendMessageBatch(params).promise();
-
-    // tslint:disable-next-line: no-parameter-reassignment
-    failedMessages = failedMessages.concat(result.Failed.map((entry) => entry.Id));
+    const failedMessagesBatch = failedMessages.concat(result.Failed.map((entry) => entry.Id));
 
     if (endIndex < messages.length) {
-      return this._sendBatch(failedMessages, messages, endIndex);
+      return this._sendBatch(failedMessagesBatch, messages, endIndex);
     }
 
-    if (failedMessages.length === 0) {
+    if (failedMessagesBatch.length === 0) {
       return undefined;
     }
-
-    throw new Error(`Failed to send messages: ${failedMessages.join(', ')}`);
+    throw new Error(`Failed to send messages: ${failedMessagesBatch.join(', ')}`);
   }
 
   async queueSize(): Promise<number> {

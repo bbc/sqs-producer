@@ -384,7 +384,7 @@ describe('Producer', () => {
     await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
-  it('returns an error identifting the messages that failed', async () => {
+  it('returns an error identifying the messages that failed', async () => {
     const errMessage = 'Failed to send messages: message1, message2, message3';
     sqs.sendMessageBatch.restore();
 
