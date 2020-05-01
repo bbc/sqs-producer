@@ -1,6 +1,15 @@
 const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
-function entryFromObject(message: any): any {
+interface Message {
+    id: string;
+    body: any;
+    groupId: string;
+    deduplicationId: string;
+    delaySeconds: number;
+    messageAttributes: object;
+}
+
+function entryFromObject(message: Message): any {
     if (!message.body) {
         throw new Error(`Object messages must have 'body' prop`);
     }
@@ -25,10 +34,8 @@ function entryFromObject(message: any): any {
     }
 
     if (message.delaySeconds) {
-        if (
-            (typeof message.delaySeconds !== 'number') ||
-            (message.delaySeconds < 0 || message.delaySeconds > 900)
-        ) {
+        if ((typeof message.delaySeconds !== 'number') ||
+            (message.delaySeconds < 0 || message.delaySeconds > 900)) {
             throw new Error('Message.delaySeconds value must be a number contained within [0 - 900]');
         }
 
@@ -64,14 +71,14 @@ function entryFromObject(message: any): any {
     return entry;
 }
 
-function entryFromString(message: any): any {
+function entryFromString(message: Message): any {
     return {
         Id: message,
         MessageBody: message
     };
 }
 
-export function entryFromMessage(message: any): any {
+export function entryFromMessage(message: any): string[] {
     if (isString(message)) {
         return entryFromString(message);
     } else if (isObject(message)) {

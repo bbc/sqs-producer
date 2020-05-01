@@ -4,20 +4,27 @@ const requiredOptions = [
   'queueUrl'
 ];
 
-type Option = {
+interface Options {
   queueUrl?: string;
   batchSize?: number;
-  sqs?: any;
+  sqs?: SQS;
   region?: string;
-};
+}
 
-export class Producer {
-  static create: (options: Option) => Producer;
+interface ProducerInterface {
+  validate(option: Options): void;
+  _sendBatch(failedMessages?: any, messages?: any, startIndex?: any): any;
+  queueSize(): Promise<number>;
+  send(messages: any): Promise<any>;
+}
+
+export class Producer implements ProducerInterface {
   queueUrl: string;
   batchSize: number;
-  sqs: any;
+  sqs: SQS;
   region?: string;
-  constructor(options: Option) {
+
+  constructor(options: Options) {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
@@ -27,7 +34,7 @@ export class Producer {
     });
   }
 
-  validate(options: Option): void {
+  validate(options: Options): void {
     for (const option of requiredOptions) {
       if (!options[option]) {
         throw new Error(`Missing SQS producer option [${option}].`);
@@ -38,9 +45,9 @@ export class Producer {
     }
   }
 
-  async _sendBatch(failedMessages?: any, messages?: any, startIndex?: any): Promise<any> {
-    const endIndex = `${startIndex}${this.batchSize}`;
-    const batch = messages.slice(startIndex, endIndex);
+  async _sendBatch(failedMessages?: string[], messages?: string[], startIndex?: number): Promise<string[]> {
+    const endIndex: number = startIndex + this.batchSize;
+    const batch: string[] = messages.slice(startIndex, endIndex);
     const params: any = {
       QueueUrl: this.queueUrl
     };
@@ -69,7 +76,7 @@ export class Producer {
     return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
-  async send(messages: any): Promise<any> {
+  async send(messages: string | string[]): Promise<string[]> {
     const failedMessages = [];
     const startIndex = 0;
 
@@ -82,6 +89,6 @@ export class Producer {
   }
 }
 
-Producer.create = (options: Option) => {
+export const create = (options: Options): Producer => {
   return new Producer(options);
 };
