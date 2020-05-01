@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import * as sinon from 'sinon';
-import { create, Producer } from '../src/producer';
+import { Producer } from '../src/producer';
 
 const AWS = require('aws-sdk');
 const sqs: any = new AWS.SQS();
@@ -424,7 +424,7 @@ describe('Producer', () => {
 
   describe('.create', () => {
     it('creates a new instance of a Producer', () => {
-      const producerInstance = create({
+      const producerInstance = Producer.create({
         queueUrl,
         sqs
       });

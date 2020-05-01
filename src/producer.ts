@@ -19,6 +19,7 @@ interface ProducerInterface {
 }
 
 export class Producer implements ProducerInterface {
+  static create: (options: Options) => Producer;
   queueUrl: string;
   batchSize: number;
   sqs: SQS;
@@ -89,6 +90,6 @@ export class Producer implements ProducerInterface {
   }
 }
 
-export const create = (options: Options): Producer => {
+Producer.create = (options: Options): Producer => {
   return new Producer(options);
 };
