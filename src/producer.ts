@@ -4,28 +4,21 @@ const requiredOptions = [
   'queueUrl'
 ];
 
-interface Options {
+interface ProducerOptions {
   queueUrl?: string;
   batchSize?: number;
   sqs?: SQS;
   region?: string;
 }
 
-interface ProducerInterface {
-  validate(option: Options): void;
-  _sendBatch(failedMessages?: any, messages?: any, startIndex?: any): any;
-  queueSize(): Promise<number>;
-  send(messages: any): Promise<any>;
-}
-
-export class Producer implements ProducerInterface {
-  static create: (options: Options) => Producer;
+export class Producer {
+  static create: (options: ProducerOptions) => Producer;
   queueUrl: string;
   batchSize: number;
   sqs: SQS;
   region?: string;
 
-  constructor(options: Options) {
+  constructor(options: ProducerOptions) {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
@@ -33,39 +26,6 @@ export class Producer implements ProducerInterface {
       ...options,
       region: options.region || 'eu-west-1'
     });
-  }
-
-  validate(options: Options): void {
-    for (const option of requiredOptions) {
-      if (!options[option]) {
-        throw new Error(`Missing SQS producer option [${option}].`);
-      }
-    }
-    if (options.batchSize > 10 || options.batchSize < 1) {
-      throw new Error('SQS batchSize option must be between 1 and 10.');
-    }
-  }
-
-  async _sendBatch(failedMessages?: string[], messages?: string[], startIndex?: number): Promise<string[]> {
-    const endIndex: number = startIndex + this.batchSize;
-    const batch: string[] = messages.slice(startIndex, endIndex);
-    const params: any = {
-      QueueUrl: this.queueUrl
-    };
-
-    params.Entries = batch.map(entryFromMessage);
-
-    const result = await this.sqs.sendMessageBatch(params).promise();
-    const failedMessagesBatch = failedMessages.concat(result.Failed.map((entry) => entry.Id));
-
-    if (endIndex < messages.length) {
-      return this._sendBatch(failedMessagesBatch, messages, endIndex);
-    }
-
-    if (failedMessagesBatch.length === 0) {
-      return undefined;
-    }
-    throw new Error(`Failed to send messages: ${failedMessagesBatch.join(', ')}`);
   }
 
   async queueSize(): Promise<number> {
@@ -86,10 +46,44 @@ export class Producer implements ProducerInterface {
       messages = [messages];
     }
 
-    return this._sendBatch(failedMessages, messages, startIndex);
+    return this.sendBatch(failedMessages, messages, startIndex);
   }
+
+  private validate(options: ProducerOptions): void {
+    for (const option of requiredOptions) {
+      if (!options[option]) {
+        throw new Error(`Missing SQS producer option [${option}].`);
+      }
+    }
+    if (options.batchSize > 10 || options.batchSize < 1) {
+      throw new Error('SQS batchSize option must be between 1 and 10.');
+    }
+  }
+
+  private async sendBatch(failedMessages?: string[], messages?: string[], startIndex?: number): Promise<string[]> {
+    const endIndex: number = startIndex + this.batchSize;
+    const batch: string[] = messages.slice(startIndex, endIndex);
+    const params: any = {
+      QueueUrl: this.queueUrl
+    };
+
+    params.Entries = batch.map(entryFromMessage);
+
+    const result = await this.sqs.sendMessageBatch(params).promise();
+    const failedMessagesBatch = failedMessages.concat(result.Failed.map((entry) => entry.Id));
+
+    if (endIndex < messages.length) {
+      return this.sendBatch(failedMessagesBatch, messages, endIndex);
+    }
+
+    if (failedMessagesBatch.length === 0) {
+      return undefined;
+    }
+    throw new Error(`Failed to send messages: ${failedMessagesBatch.join(', ')}`);
+  }
+
 }
 
-Producer.create = (options: Options): Producer => {
+Producer.create = (options: ProducerOptions): Producer => {
   return new Producer(options);
 };
