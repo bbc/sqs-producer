@@ -3,7 +3,7 @@ const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
 interface Message {
     id: string;
-    body: any;
+    body: string;
     groupId: string;
     deduplicationId: string;
     delaySeconds: number;
