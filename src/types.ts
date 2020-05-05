@@ -1,3 +1,4 @@
+import { SQS } from 'aws-sdk';
 const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
 interface Message {
@@ -6,7 +7,7 @@ interface Message {
     groupId: string;
     deduplicationId: string;
     delaySeconds: number;
-    messageAttributes: object;
+    messageAttributes: SQS.MessageBodyAttributeMap;
 }
 
 function entryFromObject(message: Message): any {
@@ -22,16 +23,16 @@ function entryFromObject(message: Message): any {
         throw new Error(`FIFO Queue messages must have 'groupId' prop`);
     }
 
-    const entry: any = {
-        MessageBody: message.body
-    };
-
     if (message.id) {
         if (!isString(message.id)) {
             throw new Error('Message.id value must be a string');
         }
-        entry.Id = message.id;
     }
+
+    const entry: SQS.SendMessageBatchRequestEntry = {
+        MessageBody: message.body,
+        Id: message.id
+    };
 
     if (message.delaySeconds) {
         if ((typeof message.delaySeconds !== 'number') ||
