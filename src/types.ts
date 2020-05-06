@@ -1,4 +1,5 @@
 import { SQS } from 'aws-sdk';
+import {SendMessageBatchRequestEntry} from "aws-sdk/clients/sqs";
 const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
 interface Message {
@@ -10,7 +11,7 @@ interface Message {
     messageAttributes: SQS.MessageBodyAttributeMap;
 }
 
-function entryFromObject(message: Message): any {
+function entryFromObject(message: Message): SendMessageBatchRequestEntry {
     if (!message.body) {
         throw new Error(`Object messages must have 'body' prop`);
     }
@@ -29,9 +30,9 @@ function entryFromObject(message: Message): any {
         }
     }
 
-    const entry: SQS.SendMessageBatchRequestEntry = {
-        MessageBody: message.body,
-        Id: message.id
+    const entry: SendMessageBatchRequestEntry = {
+        Id: message.id,
+        MessageBody: message.body
     };
 
     if (message.delaySeconds) {
@@ -72,19 +73,16 @@ function entryFromObject(message: Message): any {
     return entry;
 }
 
-function entryFromString(message: Message): any {
+function entryFromString(message: string): SendMessageBatchRequestEntry {
     return {
         Id: message,
         MessageBody: message
     };
 }
 
-export function entryFromMessage(message: any): string[] {
-    if (isString(message)) {
-        return entryFromString(message);
-    } else if (isObject(message)) {
-        return entryFromObject(message);
-    }
+export function toEntry(message: string | Message): SendMessageBatchRequestEntry {
+    if (isString(message)) return entryFromString(<string>message);
+    if (isObject(message)) return entryFromObject(<Message>message);
 
     throw new Error('A message can either be an object or a string');
 }

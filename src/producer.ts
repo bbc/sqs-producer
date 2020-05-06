@@ -1,5 +1,5 @@
 import { SQS } from 'aws-sdk';
-import { entryFromMessage } from './types';
+import { toEntry } from './types';
 const requiredOptions = [
   'queueUrl'
 ];
@@ -61,13 +61,12 @@ export class Producer {
   }
 
   private async sendBatch(failedMessages?: string[], messages?: string[], startIndex?: number): Promise<string[]> {
-    const endIndex: number = startIndex + this.batchSize;
-    const batch: string[] = messages.slice(startIndex, endIndex);
-    const params: any = {
-      QueueUrl: this.queueUrl
+    const endIndex = startIndex + this.batchSize;
+    const batch = messages.slice(startIndex, endIndex);
+    const params = {
+      QueueUrl: this.queueUrl,
+      Entries: batch.map(toEntry)
     };
-
-    params.Entries = batch.map(entryFromMessage);
 
     const result = await this.sqs.sendMessageBatch(params).promise();
     const failedMessagesBatch = failedMessages.concat(result.Failed.map((entry) => entry.Id));

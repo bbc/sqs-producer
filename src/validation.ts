@@ -7,7 +7,7 @@ function isObject(value: any): boolean {
     return value && typeof value === 'object' && value instanceof Object;
 }
 
-function isMessageAttributeValid(messageAttribute: any): any {
+function isMessageAttributeValid(messageAttribute: any): boolean {
     if (!messageAttribute.DataType) {
         throw new Error('A MessageAttribute must have a DataType key');
     }
