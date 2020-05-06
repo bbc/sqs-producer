@@ -1,5 +1,5 @@
 import { SQS } from 'aws-sdk';
-import {SendMessageBatchRequestEntry} from "aws-sdk/clients/sqs";
+import { SendMessageBatchRequestEntry } from 'aws-sdk/clients/sqs';
 const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
 interface Message {
@@ -81,8 +81,8 @@ function entryFromString(message: string): SendMessageBatchRequestEntry {
 }
 
 export function toEntry(message: string | Message): SendMessageBatchRequestEntry {
-    if (isString(message)) return entryFromString(<string>message);
-    if (isObject(message)) return entryFromObject(<Message>message);
+    if (isString(message)) { return entryFromString(<string>message); }
+    if (isObject(message)) { return entryFromObject(<Message>message); }
 
     throw new Error('A message can either be an object or a string');
 }
