@@ -1,9 +1,9 @@
+import { SQS } from 'aws-sdk';
 import { assert } from 'chai';
 import * as sinon from 'sinon';
 import { Producer } from '../src/producer';
 
-const AWS = require('aws-sdk');
-const sqs: any = new AWS.SQS();
+const sqs:any = new SQS();
 
 describe('Producer', () => {
   const queueUrl = 'https://dummy-queue';
@@ -26,10 +26,10 @@ describe('Producer', () => {
     sqs.sendMessageBatch.restore();
   });
 
-  async function rejects(promise: any, errMessage: any): Promise<any> {
+  async function rejects(producerResponse: Promise<string[]>, errMessage: string): Promise<void> {
     let thrown = false;
     try {
-      await promise;
+      await producerResponse;
     } catch (err) {
       thrown = true;
       assert.equal(err.message, errMessage);
@@ -265,7 +265,7 @@ describe('Producer', () => {
     await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
-  it("returns an error when object messages attributes don't have a DataType param", async () => {
+  it(`returns an error when object messages attributes don't have a DataType param`, async () => {
     const errMessage = 'A MessageAttribute must have a DataType key';
 
     const message1 = {

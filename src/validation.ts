@@ -1,13 +1,13 @@
 
-function isString(value: any): boolean {
+export function isString(value: any): boolean {
     return typeof value === 'string' || value instanceof String;
 }
 
-function isObject(value: any): boolean {
+export function isObject(value: any): boolean {
     return value && typeof value === 'object' && value instanceof Object;
 }
 
-function isMessageAttributeValid(messageAttribute: any): boolean {
+export function isMessageAttributeValid(messageAttribute: any): boolean {
     if (!messageAttribute.DataType) {
         throw new Error('A MessageAttribute must have a DataType key');
     }
@@ -16,5 +16,3 @@ function isMessageAttributeValid(messageAttribute: any): boolean {
     }
     return true;
 }
-
-export = { isObject, isString, isMessageAttributeValid };
