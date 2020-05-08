@@ -80,17 +80,6 @@ await producer.send({
 });
 ```
 
-## Changelog
-
-### v2.0
-
-- No logic or API changes (except the migration from callbacks to promises)
-
-#### BREAKING
-
-- no more callbacks, only promises are supported now. Opens road for `async/await` syntax
-- node.js 4, 6 are not supported any more. node.js 8 and above are. 
-
 ## Development
 
 ### Test
