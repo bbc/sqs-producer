@@ -1,34 +1,43 @@
+import { SQS } from 'aws-sdk';
+import { SendMessageBatchRequestEntry } from 'aws-sdk/clients/sqs';
 const { isObject, isString, isMessageAttributeValid } = require('./validation');
 
-function entryFromObject(message) {
+interface Message {
+    id: string;
+    body: string;
+    groupId: string;
+    deduplicationId: string;
+    delaySeconds: number;
+    messageAttributes: SQS.MessageBodyAttributeMap;
+}
+
+function entryFromObject(message: Message): SendMessageBatchRequestEntry {
     if (!message.body) {
-        throw new Error("Object messages must have 'body' prop");
+        throw new Error(`Object messages must have 'body' prop`);
     }
 
     if (!message.groupId && !message.deduplicationId && !message.id) {
-        throw new Error("Object messages must have 'id' prop");
+        throw new Error(`Object messages must have 'id' prop`);
     }
 
     if (message.deduplicationId && !message.groupId) {
-        throw new Error("FIFO Queue messages must have 'groupId' prop");
+        throw new Error(`FIFO Queue messages must have 'groupId' prop`);
     }
-
-    const entry = {
-        MessageBody: message.body
-    };
 
     if (message.id) {
         if (!isString(message.id)) {
             throw new Error('Message.id value must be a string');
         }
-        entry.Id = message.id;
     }
 
+    const entry: SendMessageBatchRequestEntry = {
+        Id: message.id,
+        MessageBody: message.body
+    };
+
     if (message.delaySeconds) {
-        if (
-            (typeof message.delaySeconds !== 'number') ||
-            (message.delaySeconds < 0 || message.delaySeconds > 900)
-        ) {
+        if ((typeof message.delaySeconds !== 'number') ||
+            (message.delaySeconds < 0 || message.delaySeconds > 900)) {
             throw new Error('Message.delaySeconds value must be a number contained within [0 - 900]');
         }
 
@@ -64,22 +73,16 @@ function entryFromObject(message) {
     return entry;
 }
 
-function entryFromString(message) {
+function entryFromString(message: string): SendMessageBatchRequestEntry {
     return {
         Id: message,
         MessageBody: message
     };
 }
 
-function entryFromMessage(message) {
-    if (isString(message)) {
-        return entryFromString(message);
-    } else if (isObject(message)) {
-        return entryFromObject(message);
-    }
+export function toEntry(message: string | Message): SendMessageBatchRequestEntry {
+    if (isString(message)) { return entryFromString(<string>message); }
+    if (isObject(message)) { return entryFromObject(<Message>message); }
 
     throw new Error('A message can either be an object or a string');
 }
-
-
-module.exports = { entryFromMessage }
