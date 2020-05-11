@@ -38,7 +38,7 @@ export class Producer {
     return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
-  async send(messages: string | string[]): Promise<SendMessageBatchResultEntryList[]> {
+  async send(messages: string | string[]): Promise<SendMessageBatchResultEntryList> {
     const failedMessages = [];
     const successfulMessages = [];
     const startIndex = 0;
@@ -62,7 +62,7 @@ export class Producer {
     }
   }
 
-  private async sendBatch(failedMessages?: string[], successfulMessages?: SendMessageBatchResultEntryList[], messages?: string[], startIndex?: number): Promise<SendMessageBatchResultEntryList[]> {
+  private async sendBatch(failedMessages?: string[], successfulMessages?: SendMessageBatchResultEntryList, messages?: string[], startIndex?: number): Promise<SendMessageBatchResultEntryList> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
     const params = {
