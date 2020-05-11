@@ -1,5 +1,5 @@
 node_modules
-coverage.html
-lib-cov
-coverage/
-.nyc_output/
+coverage
+dist
+.nyc_output
+.idea
