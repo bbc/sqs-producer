@@ -222,15 +222,15 @@ describe('Producer', () => {
     await rejects(producer.send(['foo']), errMessage);
   });
 
-  it('returns an AWS response', async function () {
-    var expectedResult = [{
+  it('returns a list of successful SQS responses from the AWS SDK', async () => {
+    const expectedResult = [{
       Id: 'bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b',
       MessageId: 'd6f79694-bb5c-4cd7-bb39-3110ed744293',
       MD5OfMessageBody: '2f6fa42e801b4a6e4fd58a96f4f59840',
       MD5OfMessageAttributes: '8c229d10c5effd188ae1eef62fc3ffec'
     }];
 
-    var response = {
+    const response = {
       ResponseMetadata: {
         RequestId: "2e7c4a19-d74c-55ee-9dfb-1fe99f6fc65a"
       },

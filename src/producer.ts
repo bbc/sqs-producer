@@ -1,6 +1,6 @@
 import { SQS } from 'aws-sdk';
-import { toEntry } from './types';
 import { SendMessageBatchResultEntryList } from 'aws-sdk/clients/sqs';
+import { toEntry } from './types';
 const requiredOptions = [
   'queueUrl'
 ];
