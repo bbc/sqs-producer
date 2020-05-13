@@ -1,4 +1,5 @@
 import { SQS } from 'aws-sdk';
+import { SendMessageBatchResultEntryList } from 'aws-sdk/clients/sqs';
 import { toEntry } from './types';
 const requiredOptions = [
   'queueUrl'
@@ -37,8 +38,9 @@ export class Producer {
     return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
-  async send(messages: string | string[]): Promise<string[]> {
+  async send(messages: string | string[]): Promise<SendMessageBatchResultEntryList> {
     const failedMessages = [];
+    const successfulMessages = [];
     const startIndex = 0;
 
     if (!Array.isArray(messages)) {
@@ -46,7 +48,7 @@ export class Producer {
       messages = [messages];
     }
 
-    return this.sendBatch(failedMessages, messages, startIndex);
+    return this.sendBatch(failedMessages, successfulMessages, messages, startIndex);
   }
 
   private validate(options: ProducerOptions): void {
@@ -60,7 +62,7 @@ export class Producer {
     }
   }
 
-  private async sendBatch(failedMessages?: string[], messages?: string[], startIndex?: number): Promise<string[]> {
+  private async sendBatch(failedMessages?: string[], successfulMessages?: SendMessageBatchResultEntryList, messages?: string[], startIndex?: number): Promise<SendMessageBatchResultEntryList> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
     const params = {
@@ -70,13 +72,14 @@ export class Producer {
 
     const result = await this.sqs.sendMessageBatch(params).promise();
     const failedMessagesBatch = failedMessages.concat(result.Failed.map((entry) => entry.Id));
+    const successfulMessagesBatch = successfulMessages.concat(result.Successful);
 
     if (endIndex < messages.length) {
-      return this.sendBatch(failedMessagesBatch, messages, endIndex);
+      return this.sendBatch(failedMessagesBatch, successfulMessagesBatch, messages, endIndex);
     }
 
     if (failedMessagesBatch.length === 0) {
-      return undefined;
+      return successfulMessagesBatch;
     }
     throw new Error(`Failed to send messages: ${failedMessagesBatch.join(', ')}`);
   }
