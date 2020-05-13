@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
+    "posttest":"npm run lint",
     "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run clean && tsc",
