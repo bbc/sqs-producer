@@ -1,11 +1,11 @@
 {
   "name": "sqs-producer",
-  "version": "1.6.3",
+  "version": "2.0.0",
   "description": "Enqueues messages onto a given SQS queue",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "posttest":"npm run lint",
+    "posttest": "npm run lint",
     "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run clean && tsc",
