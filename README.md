@@ -101,3 +101,6 @@ To check for problems using ESLint
 ```
 npm run lint
 ```
+
+## Contributing
+See [contributing guildlines](./CONTRIBUTING.md)
