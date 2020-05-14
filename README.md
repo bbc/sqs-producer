@@ -16,7 +16,7 @@ npm install sqs-producer
 ## Usage
 
 ```js
-const Producer = require('sqs-producer');
+const { Producer } = require('sqs-producer');
 
 // create simple producer
 const producer = Producer.create({
