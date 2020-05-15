@@ -1,6 +1,6 @@
 {
   "name": "sqs-producer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Enqueues messages onto a given SQS queue",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,11 +10,13 @@
     "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run clean && tsc",
+    "prepublish": "npm run build",
+    "pretest": "npm run build",
     "watch": "tsc --watch",
     "clean": "rm -fr dist/*"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.0.0"
   },
   "repository": {
     "type": "git",
@@ -32,8 +34,7 @@
   ],
   "homepage": "https://github.com/bbc/sqs-producer",
   "dependencies": {
-    "aws-sdk": "^2.673.0",
-    "ts-node-register": "^1.0.0"
+    "aws-sdk": "^2.673.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
@@ -46,6 +47,7 @@
     "mocha": "^7.1.1",
     "nyc": "^15.0.0",
     "sinon": "^9.0.2",
+    "ts-node": "^8.10.1",
     "tslint": "^6.1.2",
     "tslint-config-airbnb": "^5.3.1",
     "tslint-microsoft-contrib": "^6.2.0",
