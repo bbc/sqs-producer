@@ -104,4 +104,4 @@ npm run lint
 ```
 
 ## Contributing
-See [contributing guildlines](./CONTRIBUTING.md)
+See [contributing guildlines](./.github/CONTRIBUTING.md)
