@@ -74,6 +74,7 @@ await producer.send([
 //
 // http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html
 await producer.send({
+  Id: "testId",
   body: 'Hello world from our FIFO queue!',
   groupId: 'group1234',
   deduplicationId: 'abcdef123456' // typically a hash of the message body
