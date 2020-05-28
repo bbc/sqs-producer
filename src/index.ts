@@ -1,1 +1,1 @@
-export { Producer } from './producer.js';
+export { Producer } from './producer';
