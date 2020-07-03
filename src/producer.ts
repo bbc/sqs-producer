@@ -1,6 +1,6 @@
 import { SQS } from 'aws-sdk';
 import { SendMessageBatchResultEntryList } from 'aws-sdk/clients/sqs';
-import { toEntry } from './types';
+import { Message, toEntry } from './types';
 const requiredOptions = [
   'queueUrl'
 ];
@@ -38,17 +38,13 @@ export class Producer {
     return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
-  async send(messages: string | string[]): Promise<SendMessageBatchResultEntryList> {
+  async send(messages: string | Message | (string | Message)[]): Promise<SendMessageBatchResultEntryList> {
     const failedMessages = [];
     const successfulMessages = [];
     const startIndex = 0;
+    const messagesArr = !Array.isArray(messages) ? [messages] : messages;
 
-    if (!Array.isArray(messages)) {
-      // tslint:disable-next-line: no-parameter-reassignment
-      messages = [messages];
-    }
-
-    return this.sendBatch(failedMessages, successfulMessages, messages, startIndex);
+    return this.sendBatch(failedMessages, successfulMessages, messagesArr, startIndex);
   }
 
   private validate(options: ProducerOptions): void {
@@ -62,7 +58,7 @@ export class Producer {
     }
   }
 
-  private async sendBatch(failedMessages?: string[], successfulMessages?: SendMessageBatchResultEntryList, messages?: string[], startIndex?: number): Promise<SendMessageBatchResultEntryList> {
+  private async sendBatch(failedMessages?: string[], successfulMessages?: SendMessageBatchResultEntryList, messages?: (string | Message)[], startIndex?: number): Promise<SendMessageBatchResultEntryList> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
     const params = {
