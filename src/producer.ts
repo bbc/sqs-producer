@@ -1,12 +1,9 @@
 import { SQS } from 'aws-sdk';
 import { SendMessageBatchResultEntryList } from 'aws-sdk/clients/sqs';
 import { Message, toEntry } from './types';
-const requiredOptions = [
-  'queueUrl'
-];
 
 interface ProducerOptions {
-  queueUrl?: string;
+  queueUrl: string;
   batchSize?: number;
   sqs?: SQS;
   region?: string;
@@ -48,11 +45,6 @@ export class Producer {
   }
 
   private validate(options: ProducerOptions): void {
-    for (const option of requiredOptions) {
-      if (!options[option]) {
-        throw new Error(`Missing SQS producer option [${option}].`);
-      }
-    }
     if (options.batchSize > 10 || options.batchSize < 1) {
       throw new Error('SQS batchSize option must be between 1 and 10.');
     }
