@@ -1,42 +1,27 @@
-import { SQS } from 'aws-sdk';
-import { assert } from 'chai';
-import * as sinon from 'sinon';
+import { mockClient } from 'aws-sdk-client-mock';
+import { SQSClient, SendMessageBatchCommand, GetQueueAttributesCommand } from '@aws-sdk/client-sqs';
 import { Producer } from '../src/producer';
 
-const sqs:any = new SQS();
+const sqsMock = mockClient(SQSClient);
 
 describe('Producer', () => {
   const queueUrl = 'https://dummy-queue';
   let producer;
 
   beforeEach(() => {
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.resolve({
-        Failed: [],
-        Successful: [],
-      }))
+    sqsMock.on(SendMessageBatchCommand).resolves({
+      Failed: [],
+      Successful: []
     });
 
     producer = new Producer({
-      queueUrl,
-      sqs
+      queueUrl
     });
   });
 
   afterEach(() => {
-    sqs.sendMessageBatch.restore();
+    sqsMock.reset();
   });
-
-  async function rejects(producerResponse: Promise<string[]>, errMessage: string): Promise<void> {
-    let thrown = false;
-    try {
-      await producerResponse;
-    } catch (err) {
-      thrown = true;
-      assert.equal(err.message, errMessage);
-    }
-    if (!thrown) { assert.fail(`Should have thrown: ${errMessage}`); }
-  }
 
   it('sends string messages as a batch', async () => {
     const expectedParams = {
@@ -54,8 +39,8 @@ describe('Producer', () => {
     };
 
     await producer.send(['message1', 'message2']);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(1);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand)[0].args[0].input).toEqual(expectedParams);
   });
 
   it('accepts a single message instead of an array', async () => {
@@ -70,8 +55,8 @@ describe('Producer', () => {
     };
 
     await producer.send('message1');
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(1);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand)[0].args[0].input).toEqual(expectedParams);
   });
 
   it('sends object messages as a batch', async () => {
@@ -99,8 +84,8 @@ describe('Producer', () => {
     };
 
     await producer.send([message1, message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(1);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand)[0].args[0].input).toEqual(expectedParams);
   });
 
   it('sends object messages with attributes as a batch', async () => {
@@ -140,8 +125,8 @@ describe('Producer', () => {
     };
 
     await producer.send([message1, message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(1);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand)[0].args[0].input).toEqual(expectedParams);
   });
 
   it('sends object messages with FIFO params as a batch', async () => {
@@ -177,8 +162,8 @@ describe('Producer', () => {
     };
 
     await producer.send([message1, message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(1);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand)[0].args[0].input).toEqual(expectedParams);
   });
 
   it('sends both string and object messages as a batch', async () => {
@@ -202,24 +187,24 @@ describe('Producer', () => {
     };
 
     await producer.send(['message1', message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(1);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand)[0].args[0].input).toEqual(expectedParams);
   });
 
   it('makes multiple batch requests when the number of messages is larger than 10', async () => {
     await producer.send(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']);
-    sinon.assert.calledTwice(sqs.sendMessageBatch);
+    expect(sqsMock.commandCalls(SendMessageBatchCommand).length).toBe(2);
   });
 
   it('returns an error when SQS fails', async () => {
     const errMessage = 'sqs failed';
 
-    sqs.sendMessageBatch.restore();
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.reject(new Error(errMessage)))
-    });
+    sqsMock.reset();
+    sqsMock.on(SendMessageBatchCommand).rejects(errMessage);
 
-    await rejects(producer.send(['foo']), errMessage);
+    await expect(producer.send(['foo'])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns a list of successful SQS responses from the AWS SDK', async () => {
@@ -232,27 +217,25 @@ describe('Producer', () => {
 
     const response = {
       ResponseMetadata: {
-        RequestId: "2e7c4a19-d74c-55ee-9dfb-1fe99f6fc65a"
+        RequestId: '2e7c4a19-d74c-55ee-9dfb-1fe99f6fc65a'
       },
       Successful: [
         {
-          Id: "bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b",
-          MessageId: "d6f79694-bb5c-4cd7-bb39-3110ed744293",
-          MD5OfMessageBody: "2f6fa42e801b4a6e4fd58a96f4f59840",
-          MD5OfMessageAttributes: "8c229d10c5effd188ae1eef62fc3ffec",
+          Id: 'bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b',
+          MessageId: 'd6f79694-bb5c-4cd7-bb39-3110ed744293',
+          MD5OfMessageBody: '2f6fa42e801b4a6e4fd58a96f4f59840',
+          MD5OfMessageAttributes: '8c229d10c5effd188ae1eef62fc3ffec'
         }
       ],
       Failed: []
     };
 
-    sqs.sendMessageBatch.restore();
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.resolve(response))
-    });
+    sqsMock.reset();
+    sqsMock.on(SendMessageBatchCommand).resolves(response);
 
     const result = await producer.send(['foo']);
-    
-    assert.deepEqual(result, expectedResult);
+
+    expect(result).toStrictEqual(expectedResult);
   });
 
   it('returns an error when messages are neither strings nor objects', async () => {
@@ -262,9 +245,10 @@ describe('Producer', () => {
       id: 'id1',
       body: 'body1'
     };
-    const message2 = () => { };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, () => { }])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages have invalid delaySeconds params 1', async () => {
@@ -280,7 +264,9 @@ describe('Producer', () => {
       body: 'body2'
     };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, message2])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages have invalid delaySeconds params 2', async () => {
@@ -296,10 +282,12 @@ describe('Producer', () => {
       body: 'body2'
     };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, message2])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
-  it(`returns an error when object messages attributes don't have a DataType param`, async () => {
+  it('returns an error when object messages attributes don\'t have a DataType param', async () => {
     const errMessage = 'A MessageAttribute must have a DataType key';
 
     const message1 = {
@@ -316,7 +304,9 @@ describe('Producer', () => {
       body: 'body2'
     };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, message2])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages attributes have an invalid DataType param', async () => {
@@ -337,7 +327,9 @@ describe('Producer', () => {
       body: 'body2'
     };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, message2])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages have invalid id param', async () => {
@@ -348,7 +340,9 @@ describe('Producer', () => {
       body: 'body1'
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages have invalid groupId param', async () => {
@@ -360,7 +354,9 @@ describe('Producer', () => {
       groupId: 1234
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages have invalid deduplicationId param', async () => {
@@ -373,11 +369,13 @@ describe('Producer', () => {
       deduplicationId: 1234
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when fifo messages have no groupId param', async () => {
-    const errMessage = `FIFO Queue messages must have 'groupId' prop`;
+    const errMessage = 'FIFO Queue messages must have \'groupId\' prop';
 
     const message1 = {
       id: 'id1',
@@ -385,11 +383,13 @@ describe('Producer', () => {
       deduplicationId: '1234'
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages are not of shape {id, body}', async () => {
-    const errMessage = `Object messages must have 'id' prop`;
+    const errMessage = 'Object messages must have \'id\' prop';
 
     const message1 = {
       noId: 'noId1',
@@ -400,11 +400,13 @@ describe('Producer', () => {
       body: 'body2'
     };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, message2])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error when object messages are not of shape {id, body} 2', async () => {
-    const errMessage = `Object messages must have 'body' prop`;
+    const errMessage = 'Object messages must have \'body\' prop';
 
     const message1 = {
       id: 'id1',
@@ -415,54 +417,59 @@ describe('Producer', () => {
       body: 'body2'
     };
 
-    await rejects(producer.send(['foo', message1, message2]), errMessage);
+    await expect(producer.send(['foo', message1, message2])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns an error identifying the messages that failed', async () => {
     const errMessage = 'Failed to send messages: message1, message2, message3';
-    sqs.sendMessageBatch.restore();
 
     const failedMessages = [{
-      Id: 'message1'
+      Id: 'message1',
+      SenderFault: true,
+      Code: 'code1'
     }, {
-      Id: 'message2'
+      Id: 'message2',
+      SenderFault: false,
+      Code: 'code2'
     }, {
-      Id: 'message3'
+      Id: 'message3',
+      SenderFault: true,
+      Code: 'code3'
     }];
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.resolve({
-        Failed: failedMessages
-      }))
+
+    sqsMock.reset();
+    sqsMock.on(SendMessageBatchCommand).resolves({
+      Failed: failedMessages
     });
 
-    await rejects(producer.send(['message1', 'message2', 'message3']), errMessage);
+    await expect(producer.send(['message1', 'message2', 'message3'])).rejects.toEqual(
+      new Error(errMessage)
+    );
   });
 
   it('returns the approximate size of the queue', async () => {
     const expected = '10';
-    sinon.stub(sqs, 'getQueueAttributes').withArgs({
+    sqsMock.on(GetQueueAttributesCommand, {
       QueueUrl: queueUrl,
       AttributeNames: ['ApproximateNumberOfMessages']
-    }).returns({
-      promise: () => (Promise.resolve({
-        Attributes: {
-          ApproximateNumberOfMessages: expected
-        }
-      }))
+    }).resolves({
+      Attributes: {
+        ApproximateNumberOfMessages: expected
+      }
     });
 
     const size = await producer.queueSize();
-    sqs.getQueueAttributes.restore();
-    assert.strictEqual(size, Number(expected));
+    expect(size).toStrictEqual(Number(expected));
   });
 
   describe('.create', () => {
     it('creates a new instance of a Producer', () => {
       const producerInstance = Producer.create({
-        queueUrl,
-        sqs
+        queueUrl
       });
-      assert(producerInstance instanceof Producer);
+      expect(producerInstance).toBeInstanceOf(Producer);
     });
   });
 });
