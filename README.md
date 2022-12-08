@@ -27,8 +27,8 @@ const producer = Producer.create({
 
 // create custom producer (supporting all opts as per the API docs: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property)
 AWS.config.update({
-  accessKeyId: config.queue.aws_access_key_id,
-  secretAccessKey: config.queue.aws_secret_access_key,
+  accessKeyId: 'yourAccessKey',
+  secretAccessKey: 'yourSecret',
   region: 'eu-west-1',
 });
 
