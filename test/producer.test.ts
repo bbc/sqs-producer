@@ -3,7 +3,7 @@ import { assert } from 'chai';
 import * as sinon from 'sinon';
 import { Producer } from '../src/producer';
 
-const sqs:any = new SQS();
+const sqs: any = new SQS();
 
 describe('Producer', () => {
   const queueUrl = 'https://dummy-queue';
@@ -11,10 +11,11 @@ describe('Producer', () => {
 
   beforeEach(() => {
     sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.resolve({
-        Failed: [],
-        Successful: [],
-      }))
+      promise: () =>
+        Promise.resolve({
+          Failed: [],
+          Successful: []
+        })
     });
 
     producer = new Producer({
@@ -27,7 +28,10 @@ describe('Producer', () => {
     sqs.sendMessageBatch.restore();
   });
 
-  async function rejects(producerResponse: Promise<string[]>, errMessage: string): Promise<void> {
+  async function rejects(
+    producerResponse: Promise<string[]>,
+    errMessage: string
+  ): Promise<void> {
     let thrown = false;
     try {
       await producerResponse;
@@ -35,7 +39,9 @@ describe('Producer', () => {
       thrown = true;
       assert.equal(err.message, errMessage);
     }
-    if (!thrown) { assert.fail(`Should have thrown: ${errMessage}`); }
+    if (!thrown) {
+      assert.fail(`Should have thrown: ${errMessage}`);
+    }
   }
 
   it('sends string messages as a batch', async () => {
@@ -207,7 +213,19 @@ describe('Producer', () => {
   });
 
   it('makes multiple batch requests when the number of messages is larger than 10', async () => {
-    await producer.send(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']);
+    await producer.send([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11'
+    ]);
     sinon.assert.calledTwice(sqs.sendMessageBatch);
   });
 
@@ -216,30 +234,32 @@ describe('Producer', () => {
 
     sqs.sendMessageBatch.restore();
     sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.reject(new Error(errMessage)))
+      promise: () => Promise.reject(new Error(errMessage))
     });
 
     await rejects(producer.send(['foo']), errMessage);
   });
 
   it('returns a list of successful SQS responses from the AWS SDK', async () => {
-    const expectedResult = [{
-      Id: 'bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b',
-      MessageId: 'd6f79694-bb5c-4cd7-bb39-3110ed744293',
-      MD5OfMessageBody: '2f6fa42e801b4a6e4fd58a96f4f59840',
-      MD5OfMessageAttributes: '8c229d10c5effd188ae1eef62fc3ffec'
-    }];
+    const expectedResult = [
+      {
+        Id: 'bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b',
+        MessageId: 'd6f79694-bb5c-4cd7-bb39-3110ed744293',
+        MD5OfMessageBody: '2f6fa42e801b4a6e4fd58a96f4f59840',
+        MD5OfMessageAttributes: '8c229d10c5effd188ae1eef62fc3ffec'
+      }
+    ];
 
     const response = {
       ResponseMetadata: {
-        RequestId: "2e7c4a19-d74c-55ee-9dfb-1fe99f6fc65a"
+        RequestId: '2e7c4a19-d74c-55ee-9dfb-1fe99f6fc65a'
       },
       Successful: [
         {
-          Id: "bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b",
-          MessageId: "d6f79694-bb5c-4cd7-bb39-3110ed744293",
-          MD5OfMessageBody: "2f6fa42e801b4a6e4fd58a96f4f59840",
-          MD5OfMessageAttributes: "8c229d10c5effd188ae1eef62fc3ffec",
+          Id: 'bf84d3ae-1f99-4aa5-a6d6-1c8a3ec7279b',
+          MessageId: 'd6f79694-bb5c-4cd7-bb39-3110ed744293',
+          MD5OfMessageBody: '2f6fa42e801b4a6e4fd58a96f4f59840',
+          MD5OfMessageAttributes: '8c229d10c5effd188ae1eef62fc3ffec'
         }
       ],
       Failed: []
@@ -247,11 +267,11 @@ describe('Producer', () => {
 
     sqs.sendMessageBatch.restore();
     sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.resolve(response))
+      promise: () => Promise.resolve(response)
     });
 
     const result = await producer.send(['foo']);
-    
+
     assert.deepEqual(result, expectedResult);
   });
 
@@ -262,13 +282,15 @@ describe('Producer', () => {
       id: 'id1',
       body: 'body1'
     };
-    const message2 = () => { };
+    // eslint-disable-next-line func-style
+    const message2 = () => {};
 
     await rejects(producer.send(['foo', message1, message2]), errMessage);
   });
 
   it('returns an error when object messages have invalid delaySeconds params 1', async () => {
-    const errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
+    const errMessage =
+      'Message.delaySeconds value must be a number contained within [0 - 900]';
 
     const message1 = {
       id: 'id1',
@@ -284,7 +306,8 @@ describe('Producer', () => {
   });
 
   it('returns an error when object messages have invalid delaySeconds params 2', async () => {
-    const errMessage = 'Message.delaySeconds value must be a number contained within [0 - 900]';
+    const errMessage =
+      'Message.delaySeconds value must be a number contained within [0 - 900]';
 
     const message1 = {
       id: 'id1',
@@ -320,7 +343,8 @@ describe('Producer', () => {
   });
 
   it('returns an error when object messages attributes have an invalid DataType param', async () => {
-    const errMessage = 'The DataType key of a MessageAttribute must be a String';
+    const errMessage =
+      'The DataType key of a MessageAttribute must be a String';
 
     const message1 = {
       id: 'id1',
@@ -422,34 +446,46 @@ describe('Producer', () => {
     const errMessage = 'Failed to send messages: message1, message2, message3';
     sqs.sendMessageBatch.restore();
 
-    const failedMessages = [{
-      Id: 'message1'
-    }, {
-      Id: 'message2'
-    }, {
-      Id: 'message3'
-    }];
+    const failedMessages = [
+      {
+        Id: 'message1'
+      },
+      {
+        Id: 'message2'
+      },
+      {
+        Id: 'message3'
+      }
+    ];
     sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => (Promise.resolve({
-        Failed: failedMessages
-      }))
+      promise: () =>
+        Promise.resolve({
+          Failed: failedMessages
+        })
     });
 
-    await rejects(producer.send(['message1', 'message2', 'message3']), errMessage);
+    await rejects(
+      producer.send(['message1', 'message2', 'message3']),
+      errMessage
+    );
   });
 
   it('returns the approximate size of the queue', async () => {
     const expected = '10';
-    sinon.stub(sqs, 'getQueueAttributes').withArgs({
-      QueueUrl: queueUrl,
-      AttributeNames: ['ApproximateNumberOfMessages']
-    }).returns({
-      promise: () => (Promise.resolve({
-        Attributes: {
-          ApproximateNumberOfMessages: expected
-        }
-      }))
-    });
+    sinon
+      .stub(sqs, 'getQueueAttributes')
+      .withArgs({
+        QueueUrl: queueUrl,
+        AttributeNames: ['ApproximateNumberOfMessages']
+      })
+      .returns({
+        promise: () =>
+          Promise.resolve({
+            Attributes: {
+              ApproximateNumberOfMessages: expected
+            }
+          })
+      });
 
     const size = await producer.queueSize();
     sqs.getQueueAttributes.restore();

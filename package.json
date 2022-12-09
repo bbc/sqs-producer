@@ -6,10 +6,13 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "mocha --recursive --full-trace --exit",
-    "posttest": "npm run lint",
+    "posttest": "npm run lint && npm run format:check",
     "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
     "lcov": "nyc mocha && nyc report --reporter=lcov",
-    "lint": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --loglevel warn --write \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
+    "format:check": "prettier --check \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "build": "npm run clean && tsc",
     "prepublish": "npm run build",
     "pretest": "npm run build",
@@ -41,8 +44,12 @@
     "@types/node": "^18.11.12",
     "@types/sinon": "^10.0.13",
     "chai": "^4.3.7",
+    "eslint": "^8.29.0",
+    "eslint-config-iplayer-ts": "^4.1.0",
+    "eslint-config-prettier": "^4.3.0",
     "mocha": "^10.1.0",
     "nyc": "^15.1.0",
+    "prettier": "^2.8.1",
     "sinon": "^15.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
@@ -69,5 +76,30 @@
     ],
     "sourceMap": true,
     "instrument": true
+  },
+  "eslintConfig": {
+    "extends": [
+      "iplayer-ts",
+      "prettier",
+      "prettier/react",
+      "prettier/@typescript-eslint"
+    ],
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          "selector": "variable",
+          "format": [
+            "camelCase",
+            "UPPER_CASE",
+            "PascalCase"
+          ],
+          "leadingUnderscore": "allow"
+        }
+      ]
+    }
   }
 }
