@@ -8,6 +8,7 @@
     "test": "mocha",
     "posttest": "npm run lint",
     "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
+    "lcov": "nyc mocha && nyc report --reporter=lcov",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run clean && tsc",
     "prepublish": "npm run build",
