@@ -1,9 +1,7 @@
 import { SQS } from 'aws-sdk';
 import { SendMessageBatchResultEntryList } from 'aws-sdk/clients/sqs';
 import { Message, toEntry } from './types';
-const requiredOptions = [
-  'queueUrl'
-];
+const requiredOptions = ['queueUrl'];
 
 interface ProducerOptions {
   queueUrl?: string;
@@ -23,28 +21,43 @@ export class Producer {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
-    this.sqs = options.sqs || new SQS({
-      ...options,
-      region: options.region || 'eu-west-1'
-    });
+    this.sqs =
+      options.sqs ||
+      new SQS({
+        ...options,
+        region: options.region || 'eu-west-1'
+      });
   }
 
   async queueSize(): Promise<number> {
-    const result = await this.sqs.getQueueAttributes({
-      QueueUrl: this.queueUrl,
-      AttributeNames: ['ApproximateNumberOfMessages']
-    }).promise();
+    const result = await this.sqs
+      .getQueueAttributes({
+        QueueUrl: this.queueUrl,
+        AttributeNames: ['ApproximateNumberOfMessages']
+      })
+      .promise();
 
-    return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
+    return Number(
+      result &&
+        result.Attributes &&
+        result.Attributes.ApproximateNumberOfMessages
+    );
   }
 
-  async send(messages: string | Message | (string | Message)[]): Promise<SendMessageBatchResultEntryList> {
+  async send(
+    messages: string | Message | (string | Message)[]
+  ): Promise<SendMessageBatchResultEntryList> {
     const failedMessages = [];
     const successfulMessages = [];
     const startIndex = 0;
     const messagesArr = !Array.isArray(messages) ? [messages] : messages;
 
-    return this.sendBatch(failedMessages, successfulMessages, messagesArr, startIndex);
+    return this.sendBatch(
+      failedMessages,
+      successfulMessages,
+      messagesArr,
+      startIndex
+    );
   }
 
   private validate(options: ProducerOptions): void {
@@ -58,7 +71,12 @@ export class Producer {
     }
   }
 
-  private async sendBatch(failedMessages?: string[], successfulMessages?: SendMessageBatchResultEntryList, messages?: (string | Message)[], startIndex?: number): Promise<SendMessageBatchResultEntryList> {
+  private async sendBatch(
+    failedMessages?: string[],
+    successfulMessages?: SendMessageBatchResultEntryList,
+    messages?: (string | Message)[],
+    startIndex?: number
+  ): Promise<SendMessageBatchResultEntryList> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
     const params = {
@@ -67,19 +85,29 @@ export class Producer {
     };
 
     const result = await this.sqs.sendMessageBatch(params).promise();
-    const failedMessagesBatch = failedMessages.concat(result.Failed.map((entry) => entry.Id));
-    const successfulMessagesBatch = successfulMessages.concat(result.Successful);
+    const failedMessagesBatch = failedMessages.concat(
+      result.Failed.map((entry) => entry.Id)
+    );
+    const successfulMessagesBatch = successfulMessages.concat(
+      result.Successful
+    );
 
     if (endIndex < messages.length) {
-      return this.sendBatch(failedMessagesBatch, successfulMessagesBatch, messages, endIndex);
+      return this.sendBatch(
+        failedMessagesBatch,
+        successfulMessagesBatch,
+        messages,
+        endIndex
+      );
     }
 
     if (failedMessagesBatch.length === 0) {
       return successfulMessagesBatch;
     }
-    throw new Error(`Failed to send messages: ${failedMessagesBatch.join(', ')}`);
+    throw new Error(
+      `Failed to send messages: ${failedMessagesBatch.join(', ')}`
+    );
   }
-
 }
 
 Producer.create = (options: ProducerOptions): Producer => {

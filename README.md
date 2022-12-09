@@ -1,9 +1,8 @@
-sqs-producer
-====================
+# sqs-producer
 
 [![NPM downloads](https://img.shields.io/npm/dm/sqs-producer.svg?style=flat)](https://npmjs.org/package/sqs-producer)
 [![Build Status](https://github.com/bbc/sqs-producer/actions/workflows/test.yml/badge.svg)](https://github.com/bbc/sqs-producer/actions/workflows/test.yml)
-[![Code Climate](https://codeclimate.com/github/BBC/sqs-producer/badges/gpa.svg)](https://codeclimate.com/github/BBC/sqs-producer) 
+[![Code Climate](https://codeclimate.com/github/BBC/sqs-producer/badges/gpa.svg)](https://codeclimate.com/github/BBC/sqs-producer)
 [![Test Coverage](https://codeclimate.com/github/BBC/sqs-producer/badges/coverage.svg)](https://codeclimate.com/github/BBC/sqs-producer)
 
 Enqueues messages onto a given SQS queue
@@ -13,11 +12,12 @@ Enqueues messages onto a given SQS queue
 ```
 npm install sqs-producer
 ```
+
 ## Usage
 
 ```js
 const { Producer } = require('sqs-producer');
-import AWS from 'aws-sdk'
+import AWS from 'aws-sdk';
 
 // create simple producer
 const producer = Producer.create({
@@ -29,13 +29,13 @@ const producer = Producer.create({
 AWS.config.update({
   accessKeyId: 'yourAccessKey',
   secretAccessKey: 'yourSecret',
-  region: 'eu-west-1',
+  region: 'eu-west-1'
 });
 
 const producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
   region: 'eu-west-1',
-  sqs: new AWS.SQS(),
+  sqs: new AWS.SQS()
 });
 
 // send messages to the queue
@@ -46,10 +46,12 @@ const size = await producer.queueSize();
 console.log(`There are ${size} messages on the queue.`);
 
 // send a message to the queue with a specific ID (by default the body is used as the ID)
-await producer.send([{
-  id: 'id1',
-  body: 'Hello world'
-}]);
+await producer.send([
+  {
+    id: 'id1',
+    body: 'Hello world'
+  }
+]);
 
 // send a message to the queue with
 // - delaySeconds (must be an number contained within 0 and 900)
@@ -80,7 +82,7 @@ await producer.send([
 //
 // http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html
 await producer.send({
-  id: "testId",
+  id: 'testId',
   body: 'Hello world from our FIFO queue!',
   groupId: 'group1234',
   deduplicationId: 'abcdef123456' // typically a hash of the message body
@@ -96,6 +98,7 @@ npm test
 ```
 
 ### Coverage
+
 For coverage report, run the command:
 
 ```
@@ -103,6 +106,7 @@ npm run coverage
 ```
 
 ### Lint
+
 To check for problems using ESLint
 
 ```
@@ -110,4 +114,5 @@ npm run lint
 ```
 
 ## Contributing
+
 See [contributing guildlines](./.github/CONTRIBUTING.md)
