@@ -1,12 +1,16 @@
-import { SQS } from 'aws-sdk';
-import { SendMessageBatchResultEntryList } from 'aws-sdk/clients/sqs';
+import {
+  SQSClient,
+  SendMessageBatchResultEntry,
+  SendMessageBatchCommand,
+  GetQueueAttributesCommand
+} from '@aws-sdk/client-sqs';
 import { Message, toEntry } from './types';
 const requiredOptions = ['queueUrl'];
 
 interface ProducerOptions {
   queueUrl?: string;
   batchSize?: number;
-  sqs?: SQS;
+  sqs?: SQSClient;
   region?: string;
 }
 
@@ -14,7 +18,7 @@ export class Producer {
   static create: (options: ProducerOptions) => Producer;
   queueUrl: string;
   batchSize: number;
-  sqs: SQS;
+  sqs: SQSClient;
   region?: string;
 
   constructor(options: ProducerOptions) {
@@ -23,19 +27,19 @@ export class Producer {
     this.batchSize = options.batchSize || 10;
     this.sqs =
       options.sqs ||
-      new SQS({
+      new SQSClient({
         ...options,
         region: options.region || 'eu-west-1'
       });
   }
 
   async queueSize(): Promise<number> {
-    const result = await this.sqs
-      .getQueueAttributes({
-        QueueUrl: this.queueUrl,
-        AttributeNames: ['ApproximateNumberOfMessages']
-      })
-      .promise();
+    const command = new GetQueueAttributesCommand({
+      QueueUrl: this.queueUrl,
+      AttributeNames: ['ApproximateNumberOfMessages']
+    });
+
+    const result = await this.sqs.send(command);
 
     return Number(
       result &&
@@ -46,7 +50,7 @@ export class Producer {
 
   async send(
     messages: string | Message | (string | Message)[]
-  ): Promise<SendMessageBatchResultEntryList> {
+  ): Promise<SendMessageBatchResultEntry[]> {
     const failedMessages = [];
     const successfulMessages = [];
     const startIndex = 0;
@@ -73,10 +77,10 @@ export class Producer {
 
   private async sendBatch(
     failedMessages?: string[],
-    successfulMessages?: SendMessageBatchResultEntryList,
+    successfulMessages?: SendMessageBatchResultEntry[],
     messages?: (string | Message)[],
     startIndex?: number
-  ): Promise<SendMessageBatchResultEntryList> {
+  ): Promise<SendMessageBatchResultEntry[]> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
     const params = {
@@ -84,7 +88,8 @@ export class Producer {
       Entries: batch.map(toEntry)
     };
 
-    const result = await this.sqs.sendMessageBatch(params).promise();
+    const command = new SendMessageBatchCommand(params);
+    const result = await this.sqs.send(command);
     const failedMessagesBatch = failedMessages.concat(
       result.Failed.map((entry) => entry.Id)
     );
