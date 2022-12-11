@@ -91,10 +91,10 @@ export class Producer {
     const command = new SendMessageBatchCommand(params);
     const result = await this.sqs.send(command);
     const failedMessagesBatch = failedMessages.concat(
-      result.Failed.map((entry) => entry.Id)
+      result?.Failed?.map((entry) => entry.Id) || []
     );
     const successfulMessagesBatch = successfulMessages.concat(
-      result.Successful
+      result?.Successful || []
     );
 
     if (endIndex < messages.length) {
