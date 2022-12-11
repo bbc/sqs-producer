@@ -17,7 +17,7 @@ npm install sqs-producer
 > This library assumes you are using [AWS SDK v3](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/index.html). If you are using v2, please install v2.2.0:
 >
 > ```bash
-> npm install sqs-producer@5.8.0 --save-dev
+> npm install sqs-producer@2.2.0 --save-dev
 > ```
 
 ## Usage
