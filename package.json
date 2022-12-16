@@ -1,6 +1,6 @@
 {
   "name": "sqs-producer",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Enqueues messages onto a given SQS queue",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
     "format": "prettier --loglevel warn --write \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "format:check": "prettier --check \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "build": "npm run clean && tsc",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "pretest": "npm run build",
     "watch": "tsc --watch",
     "clean": "rm -fr dist/*"
