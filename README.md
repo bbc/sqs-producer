@@ -13,29 +13,23 @@ Enqueues messages onto a given SQS queue
 npm install sqs-producer
 ```
 
+> **Note**
+> This library assumes you are using [AWS SDK v3](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/index.html). If you are using v2, please install v2.2.0:
+>
+> ```bash
+> npm install sqs-producer@2.2.0 --save-dev
+> ```
+
 ## Usage
 
 ```js
-const { Producer } = require('sqs-producer');
-import AWS from 'aws-sdk';
+import { Producer } from 'sqs-producer';
+import { SQSClient } from '@aws-sdk/client-sqs';
 
 // create simple producer
 const producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
   region: 'eu-west-1'
-});
-
-// create custom producer (supporting all opts as per the API docs: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property)
-AWS.config.update({
-  accessKeyId: 'yourAccessKey',
-  secretAccessKey: 'yourSecret',
-  region: 'eu-west-1'
-});
-
-const producer = Producer.create({
-  queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
-  region: 'eu-west-1',
-  sqs: new AWS.SQS()
 });
 
 // send messages to the queue
@@ -87,6 +81,38 @@ await producer.send({
   groupId: 'group1234',
   deduplicationId: 'abcdef123456' // typically a hash of the message body
 });
+```
+
+### Credentials
+
+By default the consumer will look for AWS credentials in the places [specified by the AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials). The simplest option is to export your credentials as environment variables:
+
+```bash
+export AWS_SECRET_ACCESS_KEY=...
+export AWS_ACCESS_KEY_ID=...
+```
+
+If you need to specify your credentials manually, you can use a pre-configured instance of the [SQS Client](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/classes/sqsclient.html) client.
+
+```js
+import { Producer } from 'sqs-producer';
+import { SQSClient } from '@aws-sdk/client-sqs';
+
+// create simple producer
+const producer = Producer.create({
+  queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
+  region: 'eu-west-1',
+  sqs: new SQSClient({
+    region: 'my-region',
+    credentials: {
+      accessKeyId: 'yourAccessKey',
+      secretAccessKey: 'yourSecret'
+    }
+  })
+});
+
+// send messages to the queue
+await producer.send(['msg1', 'msg2']);
 ```
 
 ## Development

@@ -1,6 +1,8 @@
-import { SQS } from 'aws-sdk';
-import { SendMessageBatchRequestEntry } from 'aws-sdk/clients/sqs';
-const { isObject, isString, isMessageAttributeValid } = require('./validation');
+import {
+  SendMessageBatchRequestEntry,
+  MessageAttributeValue
+} from '@aws-sdk/client-sqs';
+import { isObject, isString, isMessageAttributeValid } from './validation';
 
 export interface Message {
   id: string;
@@ -8,7 +10,7 @@ export interface Message {
   groupId?: string;
   deduplicationId?: string;
   delaySeconds?: number;
-  messageAttributes?: SQS.MessageBodyAttributeMap;
+  messageAttributes?: { [key: string]: MessageAttributeValue };
 }
 
 function entryFromObject(message: Message): SendMessageBatchRequestEntry {

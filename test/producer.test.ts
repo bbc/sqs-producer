@@ -1,21 +1,28 @@
-import { SQS } from 'aws-sdk';
+import {
+  SQSClient,
+  SendMessageBatchCommand,
+  GetQueueAttributesCommand
+} from '@aws-sdk/client-sqs';
 import { assert } from 'chai';
 import * as sinon from 'sinon';
 import { Producer } from '../src/producer';
 
-const sqs: any = new SQS();
+const sandbox = sinon.createSandbox();
+
+const mockSendBatch = sinon.match.instanceOf(SendMessageBatchCommand);
+const mockGetAttributes = sinon.match.instanceOf(GetQueueAttributesCommand);
 
 describe('Producer', () => {
   const queueUrl = 'https://dummy-queue';
   let producer;
+  let sqs;
 
   beforeEach(() => {
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () =>
-        Promise.resolve({
-          Failed: [],
-          Successful: []
-        })
+    sqs = sinon.createStubInstance(SQSClient);
+    sqs.send = sinon.stub();
+    sqs.send.withArgs(mockSendBatch).resolves({
+      Failed: [],
+      Successful: []
     });
 
     producer = new Producer({
@@ -25,7 +32,7 @@ describe('Producer', () => {
   });
 
   afterEach(() => {
-    sqs.sendMessageBatch.restore();
+    sandbox.restore();
   });
 
   async function rejects(
@@ -60,8 +67,7 @@ describe('Producer', () => {
     };
 
     await producer.send(['message1', 'message2']);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    sqs.send.calledOnceWith(expectedParams);
   });
 
   it('accepts a single message instead of an array', async () => {
@@ -76,8 +82,7 @@ describe('Producer', () => {
     };
 
     await producer.send('message1');
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    sqs.send.calledOnceWith(expectedParams);
   });
 
   it('sends object messages as a batch', async () => {
@@ -105,8 +110,7 @@ describe('Producer', () => {
     };
 
     await producer.send([message1, message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    sqs.send.calledOnceWith(expectedParams);
   });
 
   it('sends object messages with attributes as a batch', async () => {
@@ -146,8 +150,7 @@ describe('Producer', () => {
     };
 
     await producer.send([message1, message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    sqs.send.calledOnceWith(expectedParams);
   });
 
   it('sends object messages with FIFO params as a batch', async () => {
@@ -183,8 +186,7 @@ describe('Producer', () => {
     };
 
     await producer.send([message1, message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    sqs.send.calledOnceWith(expectedParams);
   });
 
   it('sends both string and object messages as a batch', async () => {
@@ -208,8 +210,7 @@ describe('Producer', () => {
     };
 
     await producer.send(['message1', message2]);
-    sinon.assert.calledOnce(sqs.sendMessageBatch);
-    sinon.assert.calledWith(sqs.sendMessageBatch, expectedParams);
+    sqs.send.calledOnceWith(expectedParams);
   });
 
   it('makes multiple batch requests when the number of messages is larger than 10', async () => {
@@ -226,16 +227,13 @@ describe('Producer', () => {
       '10',
       '11'
     ]);
-    sinon.assert.calledTwice(sqs.sendMessageBatch);
+    sandbox.assert.calledTwice(sqs.send);
   });
 
   it('returns an error when SQS fails', async () => {
     const errMessage = 'sqs failed';
 
-    sqs.sendMessageBatch.restore();
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => Promise.reject(new Error(errMessage))
-    });
+    sqs.send.withArgs(mockSendBatch).rejects(new Error(errMessage));
 
     await rejects(producer.send(['foo']), errMessage);
   });
@@ -265,10 +263,7 @@ describe('Producer', () => {
       Failed: []
     };
 
-    sqs.sendMessageBatch.restore();
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () => Promise.resolve(response)
-    });
+    sqs.send.withArgs(mockSendBatch).resolves(response);
 
     const result = await producer.send(['foo']);
 
@@ -444,7 +439,6 @@ describe('Producer', () => {
 
   it('returns an error identifying the messages that failed', async () => {
     const errMessage = 'Failed to send messages: message1, message2, message3';
-    sqs.sendMessageBatch.restore();
 
     const failedMessages = [
       {
@@ -457,11 +451,8 @@ describe('Producer', () => {
         Id: 'message3'
       }
     ];
-    sinon.stub(sqs, 'sendMessageBatch').returns({
-      promise: () =>
-        Promise.resolve({
-          Failed: failedMessages
-        })
+    sqs.send.withArgs(mockSendBatch).resolves({
+      Failed: failedMessages
     });
 
     await rejects(
@@ -472,23 +463,13 @@ describe('Producer', () => {
 
   it('returns the approximate size of the queue', async () => {
     const expected = '10';
-    sinon
-      .stub(sqs, 'getQueueAttributes')
-      .withArgs({
-        QueueUrl: queueUrl,
-        AttributeNames: ['ApproximateNumberOfMessages']
-      })
-      .returns({
-        promise: () =>
-          Promise.resolve({
-            Attributes: {
-              ApproximateNumberOfMessages: expected
-            }
-          })
-      });
+    sqs.send.withArgs(mockGetAttributes).resolves({
+      Attributes: {
+        ApproximateNumberOfMessages: expected
+      }
+    });
 
     const size = await producer.queueSize();
-    sqs.getQueueAttributes.restore();
     assert.strictEqual(size, Number(expected));
   });
 
