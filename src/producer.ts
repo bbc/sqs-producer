@@ -8,7 +8,7 @@ import { Message, toEntry } from './types';
 const requiredOptions = ['queueUrl'];
 
 interface ProducerOptions {
-  queueUrl?: string;
+  queueUrl: string;
   batchSize?: number;
   sqs?: SQSClient;
   region?: string;
