@@ -4,7 +4,9 @@ import {
   SendMessageBatchCommand,
   GetQueueAttributesCommand
 } from '@aws-sdk/client-sqs';
-import { Message, ProducerOptions, toEntry } from './types';
+import { Message, ProducerOptions } from './types';
+import { toEntry } from './format';
+
 const requiredOptions = ['queueUrl'];
 
 export class Producer {
