@@ -4,15 +4,10 @@ import {
   SendMessageBatchCommand,
   GetQueueAttributesCommand
 } from '@aws-sdk/client-sqs';
-import { Message, toEntry } from './types';
-const requiredOptions = ['queueUrl'];
+import { Message, ProducerOptions } from './types';
+import { toEntry } from './format';
 
-interface ProducerOptions {
-  queueUrl: string;
-  batchSize?: number;
-  sqs?: SQSClient;
-  region?: string;
-}
+const requiredOptions = ['queueUrl'];
 
 export class Producer {
   static create: (options: ProducerOptions) => Producer;
