@@ -1,7 +1,4 @@
-import {
-  MessageAttributeValue,
-  SQSClient
-} from '@aws-sdk/client-sqs';
+import { MessageAttributeValue, SQSClient } from '@aws-sdk/client-sqs';
 
 export interface ProducerOptions {
   queueUrl: string;

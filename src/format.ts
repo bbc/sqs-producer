@@ -1,6 +1,4 @@
-import {
-  SendMessageBatchRequestEntry
-} from '@aws-sdk/client-sqs';
+import { SendMessageBatchRequestEntry } from '@aws-sdk/client-sqs';
 import { Message } from './types';
 import { isObject, isString, isMessageAttributeValid } from './validation';
 
