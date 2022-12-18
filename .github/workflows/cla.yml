@@ -19,6 +19,6 @@ jobs:
           path-to-signatures: 'sqs-producer/v1/cla.json'
           remote-organization-name: 'bbc'
           remote-repository-name: 'cla-signatures'
-          path-to-document: 'https://github.com/bbc/sqs-producer/blob/main/.github/CLA.md'
+          path-to-document: 'https://bbc.github.io/cla-signatures/cla/v1/cla.md'
           branch: 'main'
           allowlist: bot*
