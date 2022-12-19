@@ -14,7 +14,7 @@
     "format": "prettier --loglevel warn --write \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "format:check": "prettier --check \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "build": "npm run clean && tsc",
-    "prepare": "npm run build",
+    "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "watch": "tsc --watch",
     "clean": "rm -fr dist/*"
