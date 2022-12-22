@@ -3,3 +3,4 @@ coverage
 dist
 .nyc_output
 .idea
+.DS_Store
