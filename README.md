@@ -2,8 +2,8 @@
 
 [![NPM downloads](https://img.shields.io/npm/dm/sqs-producer.svg?style=flat)](https://npmjs.org/package/sqs-producer)
 [![Build Status](https://github.com/bbc/sqs-producer/actions/workflows/test.yml/badge.svg)](https://github.com/bbc/sqs-producer/actions/workflows/test.yml)
-[![Code Climate](https://codeclimate.com/github/BBC/sqs-producer/badges/gpa.svg)](https://codeclimate.com/github/BBC/sqs-producer)
-[![Test Coverage](https://codeclimate.com/github/BBC/sqs-producer/badges/coverage.svg)](https://codeclimate.com/github/BBC/sqs-producer)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/maintainability)](https://codeclimate.com/github/bbc/sqs-producer/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/test_coverage)](https://codeclimate.com/github/bbc/sqs-producer/test_coverage)
 
 Enqueues messages onto a given SQS queue
 
