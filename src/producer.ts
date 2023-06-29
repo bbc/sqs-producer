@@ -24,7 +24,7 @@ export class Producer {
       options.sqs ||
       new SQSClient({
         ...options,
-        region: options.region || 'eu-west-1'
+        region: options.region || process.env.AWS_REGION || 'eu-west-1'
       });
   }
 
