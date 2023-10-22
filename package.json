@@ -7,8 +7,8 @@
   "scripts": {
     "test": "mocha --recursive --full-trace --exit",
     "posttest": "npm run lint && npm run format:check",
-    "coverage": "nyc mocha && nyc report --reporter=html && nyc report --reporter=json-summary",
-    "lcov": "nyc mocha && nyc report --reporter=lcov",
+    "coverage": "c8 mocha && c8 report --reporter=html && c8 report --reporter=json-summary",
+    "lcov": "c8 mocha && c8 report --reporter=lcov",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --fix",
     "format": "prettier --loglevel warn --write \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
@@ -38,33 +38,33 @@
   ],
   "homepage": "https://github.com/bbc/sqs-producer",
   "devDependencies": {
-    "@types/chai": "^4.3.5",
-    "@types/debug": "^4.1.8",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.1",
-    "@types/sinon": "^10.0.15",
-    "chai": "^4.3.7",
-    "eslint": "^8.44.0",
-    "eslint-config-iplayer-ts": "^4.1.1",
-    "eslint-config-prettier": "^8.8.0",
+    "@types/chai": "^4.3.9",
+    "@types/debug": "^4.1.10",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "^20.8.7",
+    "@types/sinon": "^10.0.20",
+    "chai": "^4.3.10",
+    "eslint": "^8.52.0",
+    "eslint-config-iplayer": "^9.1.0",
+    "eslint-config-prettier": "^9.0.0",
     "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
-    "prettier": "^3.0.0",
-    "sinon": "^15.2.0",
+    "c8": "^8.0.1",
+    "prettier": "^3.0.3",
+    "sinon": "^17.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.363.0"
+    "@aws-sdk/client-sqs": "^3.428.0"
   },
   "peerDependencies": {
-    "@aws-sdk/client-sqs": "^3.363.0"
+    "@aws-sdk/client-sqs": "^3.428.0"
   },
   "mocha": {
     "spec": "test/**/**/*.test.ts",
     "require": "ts-node/register"
   },
-  "nyc": {
+  "c8": {
     "include": [
       "src/**/*.ts"
     ],
@@ -79,7 +79,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "iplayer-ts",
+      "iplayer/base",
+      "iplayer/ts",
       "prettier"
     ],
     "parserOptions": {
