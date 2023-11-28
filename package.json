@@ -1,6 +1,6 @@
 {
   "name": "sqs-producer",
-  "version": "3.4.0",
+  "version": "4.0.0",
   "description": "Enqueues messages onto a given SQS queue",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -55,10 +55,10 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.428.0"
+    "@aws-sdk/client-sqs": "^3.454.0"
   },
   "peerDependencies": {
-    "@aws-sdk/client-sqs": "^3.428.0"
+    "@aws-sdk/client-sqs": "^3.454.0"
   },
   "mocha": {
     "spec": "test/**/**/*.test.ts",
