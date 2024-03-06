@@ -20,6 +20,7 @@ export class Producer {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
+    options.useQueueUrlAsEndpoint = options.useQueueUrlAsEndpoint ?? true;
     this.sqs =
       options.sqs ||
       new SQSClient({

@@ -5,6 +5,7 @@ export interface ProducerOptions {
   batchSize?: number;
   sqs?: SQSClient;
   region?: string;
+  useQueueUrlAsEndpoint?: boolean;
 }
 
 export interface Message {
