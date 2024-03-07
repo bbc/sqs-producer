@@ -20,11 +20,11 @@ export class Producer {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
-    options.useQueueUrlAsEndpoint = options.useQueueUrlAsEndpoint ?? true;
     this.sqs =
       options.sqs ||
       new SQSClient({
         ...options,
+        useQueueUrlAsEndpoint: options.useQueueUrlAsEndpoint ?? true,
         region: options.region || process.env.AWS_REGION || 'eu-west-1'
       });
   }
