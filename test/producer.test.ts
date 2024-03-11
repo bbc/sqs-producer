@@ -455,10 +455,16 @@ describe('Producer', () => {
       Failed: failedMessages
     });
 
-    await rejects(
-      producer.send(['message1', 'message2', 'message3']),
-      errMessage
-    );
+    try {
+      await producer.send(['message1', 'message2', 'message3']);
+      assert.fail('Should have thrown');
+    } catch (err) {
+      assert.equal(err.message, errMessage);
+      assert.deepEqual(
+        err.failedMessages,
+        failedMessages.map((m) => m.Id)
+      );
+    }
   });
 
   it('returns the approximate size of the queue', async () => {

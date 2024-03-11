@@ -6,6 +6,7 @@ import {
 } from '@aws-sdk/client-sqs';
 import { Message, ProducerOptions } from './types';
 import { toEntry } from './format';
+import { FailedMessagesError } from './errors';
 
 const requiredOptions = ['queueUrl'];
 
@@ -105,9 +106,7 @@ export class Producer {
     if (failedMessagesBatch.length === 0) {
       return successfulMessagesBatch;
     }
-    throw new Error(
-      `Failed to send messages: ${failedMessagesBatch.join(', ')}`
-    );
+    throw new FailedMessagesError(failedMessagesBatch);
   }
 }
 
