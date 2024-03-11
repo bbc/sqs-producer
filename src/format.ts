@@ -2,6 +2,12 @@ import { SendMessageBatchRequestEntry } from '@aws-sdk/client-sqs';
 import { Message } from './types';
 import { isObject, isString, isMessageAttributeValid } from './validation';
 
+/**
+ * Converts a message object to a SendMessageBatchRequestEntry
+ * @param message - The message to convert
+ * @returns The SendMessageBatchRequestEntry
+ * @throws Will throw an error if the message is invalid
+ */
 function entryFromObject(message: Message): SendMessageBatchRequestEntry {
   if (!message.body) {
     throw new Error(`Object messages must have 'body' prop`);
@@ -69,6 +75,10 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
   return entry;
 }
 
+/**
+ * Converts a message string to a SendMessageBatchRequestEntry
+ * @param message The message to convert
+ */
 function entryFromString(message: string): SendMessageBatchRequestEntry {
   return {
     Id: message,
@@ -76,6 +86,11 @@ function entryFromString(message: string): SendMessageBatchRequestEntry {
   };
 }
 
+/**
+ * Converts a message to a SendMessageBatchRequestEntry using the appropriate method
+ * depending on if the message is a string or an object
+ * @param message The message to convert
+ */
 export function toEntry(
   message: string | Message
 ): SendMessageBatchRequestEntry {

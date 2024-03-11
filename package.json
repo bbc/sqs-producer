@@ -17,7 +17,8 @@
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "watch": "tsc --watch",
-    "clean": "rm -fr dist/*"
+    "clean": "rm -fr dist/*",
+    "generate-docs": "typedoc"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -36,7 +37,7 @@
     "producer",
     "queue"
   ],
-  "homepage": "https://github.com/bbc/sqs-producer",
+  "homepage": "https://bbc.github.io/sqs-producer/",
   "devDependencies": {
     "@types/chai": "^4.3.12",
     "@types/debug": "^4.1.12",
@@ -52,6 +53,7 @@
     "prettier": "^3.2.5",
     "sinon": "^17.0.1",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.25.12",
     "typescript": "^5.4.2"
   },
   "dependencies": {

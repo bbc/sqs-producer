@@ -5,9 +5,11 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/maintainability)](https://codeclimate.com/github/bbc/sqs-producer/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/test_coverage)](https://codeclimate.com/github/bbc/sqs-producer/test_coverage)
 
-Enqueues messages onto a given SQS queue
+Enqueues messages onto a given SQS queue.
 
 ## Installation
+
+To install this package, enter the following command into your terminal (or the variant of whatever package manager you are using):
 
 ```
 npm install sqs-producer
@@ -23,6 +25,10 @@ npm install sqs-producer
 ### Node Version
 
 We will only support Node versions that are actively or security supported by the Node team. If you are still using an Node 14, please use a version of this library before the v3.2.1 release, if you are using Node 16, please use a version before the v3.3.0 release.
+
+## Documentation
+
+Visit [https://bbc.github.io/sqs-producer/](https://bbc.github.io/sqs-producer/) for the full API documentation.
 
 ## Usage
 
@@ -78,7 +84,7 @@ await producer.send([
 //
 // deduplicationId can be excluded if content-based deduplication is enabled
 //
-// http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html
+// https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html
 await producer.send({
   id: 'testId',
   body: 'Hello world from our FIFO queue!',
@@ -89,7 +95,7 @@ await producer.send({
 
 ### Credentials
 
-By default the consumer will look for AWS credentials in the places [specified by the AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials). The simplest option is to export your credentials as environment variables:
+By default the consumer will look for AWS credentials in the places [specified by the AWS SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials). The simplest option is to export your credentials as environment variables:
 
 ```bash
 export AWS_SECRET_ACCESS_KEY=...
@@ -123,7 +129,7 @@ await producer.send(['msg1', 'msg2']);
 
 ### Test
 
-```
+```bash
 npm test
 ```
 
@@ -131,7 +137,7 @@ npm test
 
 For coverage report, run the command:
 
-```
+```bash
 npm run coverage
 ```
 
@@ -139,10 +145,16 @@ npm run coverage
 
 To check for problems using ESLint
 
-```
+```bash
 npm run lint
 ```
 
 ## Contributing
 
-See [contributing guildlines](./.github/CONTRIBUTING.md)
+We welcome and appreciate contributions for anyone who would like to take the time to fix a bug or implement a new feature.
+
+But before you get started, [please read the contributing guidelines](https://github.com/bbc/sqs-producer/blob/main/.github/CONTRIBUTING.md) and [code of conduct](https://github.com/bbc/sqs-producer/blob/main/.github/CODE_OF_CONDUCT.md).
+
+## License
+
+SQS Producer is distributed under the Apache License, Version 2.0, see [LICENSE](./LICENSE) for more information.
