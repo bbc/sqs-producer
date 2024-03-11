@@ -4,3 +4,4 @@ lib-cov
 coverage/
 .nyc_output/
 test
+public

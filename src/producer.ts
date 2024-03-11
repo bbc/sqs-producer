@@ -10,6 +10,9 @@ import { FailedMessagesError } from './errors';
 
 const requiredOptions = ['queueUrl'];
 
+/**
+ * [Usage](https://bbc.github.io/sqs-producer/index.html#usage)
+ */
 export class Producer {
   static create: (options: ProducerOptions) => Producer;
   queueUrl: string;
@@ -30,6 +33,10 @@ export class Producer {
       });
   }
 
+  /**
+   * Returns the number of messages in the queue.
+   * @returns A promise that resolves to the number of messages in the queue.
+   */
   async queueSize(): Promise<number> {
     const command = new GetQueueAttributesCommand({
       QueueUrl: this.queueUrl,
@@ -45,6 +52,11 @@ export class Producer {
     );
   }
 
+  /**
+   * Send a message to the queue.
+   * @param messages - A single message or an array of messages.
+   * @returns A promise that resolves to the result of the send operation.
+   */
   async send(
     messages: string | Message | (string | Message)[]
   ): Promise<SendMessageBatchResultEntry[]> {
@@ -61,6 +73,11 @@ export class Producer {
     );
   }
 
+  /**
+   * Validate the producer options.
+   * @param options - The producer options to validate.
+   * @throws Error if any required options are missing or invalid.
+   */
   private validate(options: ProducerOptions): void {
     for (const option of requiredOptions) {
       if (!options[option]) {
@@ -72,6 +89,15 @@ export class Producer {
     }
   }
 
+  /**
+   * Send a batch of messages to the queue.
+   * @param failedMessages - An array of failed message IDs.
+   * @param successfulMessages - An array of successful message results.
+   * @param messages - An array of messages to send.
+   * @param startIndex - The index of the first message in the batch.
+   * @returns A promise that resolves to the result of the send operation.
+   * @throws FailedMessagesError
+   */
   private async sendBatch(
     failedMessages?: string[],
     successfulMessages?: SendMessageBatchResultEntry[],
@@ -110,6 +136,10 @@ export class Producer {
   }
 }
 
+/**
+ * Creates a new producer.
+ * @param options - The producer options.
+ */
 Producer.create = (options: ProducerOptions): Producer => {
   return new Producer(options);
 };

@@ -1,3 +1,6 @@
+/**
+ * Error thrown when a message fails to send.
+ */
 export class FailedMessagesError extends Error {
   /** Ids of messages that failed to send. */
   public failedMessages: string[];
