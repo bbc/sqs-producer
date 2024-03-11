@@ -5,7 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/maintainability)](https://codeclimate.com/github/bbc/sqs-producer/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/test_coverage)](https://codeclimate.com/github/bbc/sqs-producer/test_coverage)
 
-Enqueues messages onto a given SQS queue
+Enqueues messages onto a given SQS queue.
 
 ## Installation
 
@@ -25,6 +25,10 @@ npm install sqs-producer
 ### Node Version
 
 We will only support Node versions that are actively or security supported by the Node team. If you are still using an Node 14, please use a version of this library before the v3.2.1 release, if you are using Node 16, please use a version before the v3.3.0 release.
+
+## Documentation
+
+Visit [https://bbc.github.io/sqs-producer/](https://bbc.github.io/sqs-producer/) for the full API documentation.
 
 ## Usage
 
