@@ -25,6 +25,7 @@ export class Producer {
       options.sqs ||
       new SQSClient({
         ...options,
+        useQueueUrlAsEndpoint: options.useQueueUrlAsEndpoint ?? true,
         region: options.region || process.env.AWS_REGION || 'eu-west-1'
       });
   }

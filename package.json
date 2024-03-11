@@ -55,10 +55,10 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.454.0"
+    "@aws-sdk/client-sqs": "^3.507"
   },
   "peerDependencies": {
-    "@aws-sdk/client-sqs": "^3.454.0"
+    "@aws-sdk/client-sqs": "^3.507"
   },
   "mocha": {
     "spec": "test/**/**/*.test.ts",
