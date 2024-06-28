@@ -127,35 +127,37 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^11.1.0",
+    "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/npm": "11.0.2",
-    "@semantic-release/release-notes-generator": "^12.1.0",
-    "@types/chai": "^4.3.12",
+    "@semantic-release/github": "^10.0.6",
+    "@semantic-release/npm": "12.0.1",
+    "@semantic-release/release-notes-generator": "^14.0.1",
+    "@types/chai": "^4.3.16",
     "@types/debug": "^4.1.12",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.25",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^20.14.9",
     "@types/sinon": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "chai": "^4.4.1",
-    "conventional-changelog-conventionalcommits": "^7.0.2",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^8.57.0",
     "eslint-config-iplayer": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
-    "mocha": "^10.3.0",
+    "mocha": "^10.5.2",
     "c8": "^9.1.0",
-    "prettier": "^3.2.5",
-    "semantic-release": "^23.0.0",
-    "sinon": "^17.0.1",
+    "prettier": "^3.3.2",
+    "semantic-release": "^24.0.0",
+    "sinon": "^18.0.0",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.25.12",
-    "typescript": "^5.4.2"
+    "typedoc": "^0.26.3",
+    "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.529.1"
+    "@aws-sdk/client-sqs": "^3.600.0"
   },
   "peerDependencies": {
-    "@aws-sdk/client-sqs": "^3.529.1"
+    "@aws-sdk/client-sqs": "^3.600.0"
   },
   "mocha": {
     "spec": "test/**/**/*.test.ts",
