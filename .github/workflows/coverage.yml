@@ -3,9 +3,13 @@ on:
   pull_request:
     branches:
       - 'main'
+      - canary
+      - "*.x"
   push:
     branches:
       - main
+      - canary
+      - "*.x"
 permissions:
   contents: read
 
