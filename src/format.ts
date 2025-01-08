@@ -1,6 +1,7 @@
-import type { SendMessageBatchRequestEntry } from '@aws-sdk/client-sqs';
-import type { Message } from './types';
-import { isObject, isString, isMessageAttributeValid } from './validation';
+import type { SendMessageBatchRequestEntry } from "@aws-sdk/client-sqs";
+
+import type { Message } from "./types.js";
+import { isObject, isString, isMessageAttributeValid } from "./validation.js";
 
 /**
  * Converts a message object to a SendMessageBatchRequestEntry
@@ -23,23 +24,23 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
 
   if (message.id) {
     if (!isString(message.id)) {
-      throw new Error('Message.id value must be a string');
+      throw new Error("Message.id value must be a string");
     }
   }
 
   const entry: SendMessageBatchRequestEntry = {
     Id: message.id,
-    MessageBody: message.body
+    MessageBody: message.body,
   };
 
   if (message.delaySeconds) {
     if (
-      typeof message.delaySeconds !== 'number' ||
+      typeof message.delaySeconds !== "number" ||
       message.delaySeconds < 0 ||
       message.delaySeconds > 900
     ) {
       throw new Error(
-        'Message.delaySeconds value must be a number contained within [0 - 900]'
+        "Message.delaySeconds value must be a number contained within [0 - 900]",
       );
     }
 
@@ -48,7 +49,7 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
 
   if (message.messageAttributes) {
     if (!isObject(message.messageAttributes)) {
-      throw new Error('Message.messageAttributes must be an object');
+      throw new Error("Message.messageAttributes must be an object");
     }
 
     Object.values(message.messageAttributes).every(isMessageAttributeValid);
@@ -58,7 +59,7 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
 
   if (message.groupId) {
     if (!isString(message.groupId)) {
-      throw new Error('Message.groupId value must be a string');
+      throw new Error("Message.groupId value must be a string");
     }
 
     entry.MessageGroupId = message.groupId;
@@ -66,7 +67,7 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
 
   if (message.deduplicationId) {
     if (!isString(message.deduplicationId)) {
-      throw new Error('Message.deduplicationId value must be a string');
+      throw new Error("Message.deduplicationId value must be a string");
     }
 
     entry.MessageDeduplicationId = message.deduplicationId;
@@ -82,7 +83,7 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
 function entryFromString(message: string): SendMessageBatchRequestEntry {
   return {
     Id: message,
-    MessageBody: message
+    MessageBody: message,
   };
 }
 
@@ -92,7 +93,7 @@ function entryFromString(message: string): SendMessageBatchRequestEntry {
  * @param message The message to convert
  */
 export function toEntry(
-  message: string | Message
+  message: string | Message,
 ): SendMessageBatchRequestEntry {
   if (isString(message)) {
     return entryFromString(message as string);
@@ -101,5 +102,5 @@ export function toEntry(
     return entryFromObject(message as Message);
   }
 
-  throw new Error('A message can either be an object or a string');
+  throw new Error("A message can either be an object or a string");
 }

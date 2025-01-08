@@ -26,17 +26,17 @@ Visit [https://bbc.github.io/sqs-producer/](https://bbc.github.io/sqs-producer/)
 ## Usage
 
 ```js
-import { Producer } from 'sqs-producer';
-import { SQSClient } from '@aws-sdk/client-sqs';
+import { Producer } from "sqs-producer";
+import { SQSClient } from "@aws-sdk/client-sqs";
 
 // create simple producer
 const producer = Producer.create({
-  queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
-  region: 'eu-west-1'
+  queueUrl: "https://sqs.eu-west-1.amazonaws.com/account-id/queue-name",
+  region: "eu-west-1",
 });
 
 // send messages to the queue
-await producer.send(['msg1', 'msg2']);
+await producer.send(["msg1", "msg2"]);
 
 // get the current size of the queue
 const size = await producer.queueSize();
@@ -45,9 +45,9 @@ console.log(`There are ${size} messages on the queue.`);
 // send a message to the queue with a specific ID (by default the body is used as the ID)
 await producer.send([
   {
-    id: 'id1',
-    body: 'Hello world'
-  }
+    id: "id1",
+    body: "Hello world",
+  },
 ]);
 
 // send a message to the queue with
@@ -55,18 +55,18 @@ await producer.send([
 // - messageAttributes
 await producer.send([
   {
-    id: 'id1',
-    body: 'Hello world with two string attributes: attr1 and attr2',
+    id: "id1",
+    body: "Hello world with two string attributes: attr1 and attr2",
     messageAttributes: {
-      attr1: { DataType: 'String', StringValue: 'stringValue' },
-      attr2: { DataType: 'Binary', BinaryValue: new Buffer('binaryValue') }
-    }
+      attr1: { DataType: "String", StringValue: "stringValue" },
+      attr2: { DataType: "Binary", BinaryValue: new Buffer("binaryValue") },
+    },
   },
   {
-    id: 'id2',
-    body: 'Hello world delayed by 5 seconds',
-    delaySeconds: 5
-  }
+    id: "id2",
+    body: "Hello world delayed by 5 seconds",
+    delaySeconds: 5,
+  },
 ]);
 
 // send a message to a FIFO queue
@@ -79,10 +79,10 @@ await producer.send([
 //
 // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html
 await producer.send({
-  id: 'testId',
-  body: 'Hello world from our FIFO queue!',
-  groupId: 'group1234',
-  deduplicationId: 'abcdef123456' // typically a hash of the message body
+  id: "testId",
+  body: "Hello world from our FIFO queue!",
+  groupId: "group1234",
+  deduplicationId: "abcdef123456", // typically a hash of the message body
 });
 ```
 
@@ -98,24 +98,24 @@ export AWS_ACCESS_KEY_ID=...
 If you need to specify your credentials manually, you can use a pre-configured instance of the [SQS Client](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/classes/sqsclient.html) client.
 
 ```js
-import { Producer } from 'sqs-producer';
-import { SQSClient } from '@aws-sdk/client-sqs';
+import { Producer } from "sqs-producer";
+import { SQSClient } from "@aws-sdk/client-sqs";
 
 // create simple producer
 const producer = Producer.create({
-  queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
-  region: 'eu-west-1',
+  queueUrl: "https://sqs.eu-west-1.amazonaws.com/account-id/queue-name",
+  region: "eu-west-1",
   sqs: new SQSClient({
-    region: 'my-region',
+    region: "my-region",
     credentials: {
-      accessKeyId: 'yourAccessKey',
-      secretAccessKey: 'yourSecret'
-    }
-  })
+      accessKeyId: "yourAccessKey",
+      secretAccessKey: "yourSecret",
+    },
+  }),
 });
 
 // send messages to the queue
-await producer.send(['msg1', 'msg2']);
+await producer.send(["msg1", "msg2"]);
 ```
 
 ## Development

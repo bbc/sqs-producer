@@ -3,7 +3,7 @@
  * @param value - The value to check
  */
 export function isString(value: any): boolean {
-  return typeof value === 'string' || value instanceof String;
+  return typeof value === "string" || value instanceof String;
 }
 
 /**
@@ -11,7 +11,7 @@ export function isString(value: any): boolean {
  * @param value - The value to check
  */
 export function isObject(value: any): boolean {
-  return value && typeof value === 'object' && value instanceof Object;
+  return value && typeof value === "object" && value instanceof Object;
 }
 
 /**
@@ -20,10 +20,10 @@ export function isObject(value: any): boolean {
  */
 export function isMessageAttributeValid(messageAttribute: any): boolean {
   if (!messageAttribute.DataType) {
-    throw new Error('A MessageAttribute must have a DataType key');
+    throw new Error("A MessageAttribute must have a DataType key");
   }
   if (!isString(messageAttribute.DataType)) {
-    throw new Error('The DataType key of a MessageAttribute must be a String');
+    throw new Error("The DataType key of a MessageAttribute must be a String");
   }
   return true;
 }

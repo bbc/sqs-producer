@@ -2,8 +2,21 @@
   "name": "sqs-producer",
   "version": "5.0.0",
   "description": "Enqueues messages onto a given SQS queue",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
   "scripts": {
     "test": "mocha --recursive --full-trace --exit",
     "posttest": "npm run lint && npm run format:check",
@@ -13,10 +26,12 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --log-level warn --write \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "format:check": "prettier --check \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
-    "build": "npm run clean && tsc",
+    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json",
+    "add-package-jsons": "node ./scripts/addPackageJsons.js",
+    "build": "npm run clean && npm run compile && npm run add-package-jsons",
+    "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
-    "watch": "tsc --watch",
     "clean": "rm -fr dist/*",
     "generate-docs": "typedoc"
   },
@@ -177,10 +192,8 @@
     "extension": [
       ".ts"
     ],
-    "require": [
-      "ts-node/register"
-    ],
     "sourceMap": true,
     "instrument": true
-  }
+  },
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
 }

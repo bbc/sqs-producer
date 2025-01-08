@@ -8,7 +8,7 @@ export class FailedMessagesError extends Error {
    * @param failedMessages Ids of messages that failed to send.
    */
   constructor(failedMessages: string[]) {
-    super(`Failed to send messages: ${failedMessages.join(', ')}`);
+    super(`Failed to send messages: ${failedMessages.join(", ")}`);
     this.failedMessages = failedMessages;
   }
 }
