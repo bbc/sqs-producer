@@ -1,10 +1,10 @@
 import {
   SQSClient,
-  SendMessageBatchResultEntry,
+  type SendMessageBatchResultEntry,
   SendMessageBatchCommand,
   GetQueueAttributesCommand
 } from '@aws-sdk/client-sqs';
-import { Message, ProducerOptions } from './types';
+import type { Message, ProducerOptions } from './types';
 import { toEntry } from './format';
 import { FailedMessagesError } from './errors';
 
