@@ -5,3 +5,11 @@ coverage/
 .nyc_output/
 test
 public
+.nyc_output
+scripts
+.github
+.prettierignore
+.prettierrc.js
+jsr.json
+typdoc.json
+eslint.config.js
