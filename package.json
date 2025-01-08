@@ -162,8 +162,13 @@
     "@aws-sdk/client-sqs": "^3.723.0"
   },
   "mocha": {
-    "spec": "test/**/**/*.test.ts",
-    "require": "ts-node/register"
+    "extensions": [
+      "ts"
+    ],
+    "spec": "test/tests/**/**/*.test.ts",
+    "node-option": [
+      "loader=ts-node/esm"
+    ]
   },
   "c8": {
     "include": [
