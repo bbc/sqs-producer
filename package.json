@@ -22,7 +22,7 @@
     "posttest": "npm run lint && npm run format:check",
     "coverage": "c8 mocha && c8 report --reporter=html && c8 report --reporter=json-summary",
     "lcov": "c8 mocha && c8 report --reporter=lcov",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --log-level warn --write \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
     "format:check": "prettier --check \"**/*.{js,json,jsx,md,ts,tsx,html}\"",
