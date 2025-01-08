@@ -1,14 +1,15 @@
 import {
   SQSClient,
-  SendMessageBatchResultEntry,
+  type SendMessageBatchResultEntry,
   SendMessageBatchCommand,
-  GetQueueAttributesCommand
-} from '@aws-sdk/client-sqs';
-import { Message, ProducerOptions } from './types';
-import { toEntry } from './format';
-import { FailedMessagesError } from './errors';
+  GetQueueAttributesCommand,
+} from "@aws-sdk/client-sqs";
 
-const requiredOptions = ['queueUrl'];
+import type { Message, ProducerOptions } from "./types.js";
+import { toEntry } from "./format.js";
+import { FailedMessagesError } from "./errors.js";
+
+const requiredOptions = ["queueUrl"];
 
 /**
  * [Usage](https://bbc.github.io/sqs-producer/index.html#usage)
@@ -29,7 +30,7 @@ export class Producer {
       new SQSClient({
         ...options,
         useQueueUrlAsEndpoint: options.useQueueUrlAsEndpoint ?? true,
-        region: options.region || process.env.AWS_REGION || 'eu-west-1'
+        region: options.region || process.env.AWS_REGION || "eu-west-1",
       });
   }
 
@@ -40,7 +41,7 @@ export class Producer {
   async queueSize(): Promise<number> {
     const command = new GetQueueAttributesCommand({
       QueueUrl: this.queueUrl,
-      AttributeNames: ['ApproximateNumberOfMessages']
+      AttributeNames: ["ApproximateNumberOfMessages"],
     });
 
     const result = await this.sqs.send(command);
@@ -48,7 +49,7 @@ export class Producer {
     return Number(
       result &&
         result.Attributes &&
-        result.Attributes.ApproximateNumberOfMessages
+        result.Attributes.ApproximateNumberOfMessages,
     );
   }
 
@@ -58,7 +59,7 @@ export class Producer {
    * @returns A promise that resolves to the result of the send operation.
    */
   async send(
-    messages: string | Message | (string | Message)[]
+    messages: string | Message | (string | Message)[],
   ): Promise<SendMessageBatchResultEntry[]> {
     const failedMessages = [];
     const successfulMessages = [];
@@ -69,7 +70,7 @@ export class Producer {
       failedMessages,
       successfulMessages,
       messagesArr,
-      startIndex
+      startIndex,
     );
   }
 
@@ -85,7 +86,7 @@ export class Producer {
       }
     }
     if (options.batchSize > 10 || options.batchSize < 1) {
-      throw new Error('SQS batchSize option must be between 1 and 10.');
+      throw new Error("SQS batchSize option must be between 1 and 10.");
     }
   }
 
@@ -102,22 +103,22 @@ export class Producer {
     failedMessages?: string[],
     successfulMessages?: SendMessageBatchResultEntry[],
     messages?: (string | Message)[],
-    startIndex?: number
+    startIndex?: number,
   ): Promise<SendMessageBatchResultEntry[]> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
     const params = {
       QueueUrl: this.queueUrl,
-      Entries: batch.map(toEntry)
+      Entries: batch.map(toEntry),
     };
 
     const command = new SendMessageBatchCommand(params);
     const result = await this.sqs.send(command);
     const failedMessagesBatch = failedMessages.concat(
-      result?.Failed?.map((entry) => entry.Id) || []
+      result?.Failed?.map((entry) => entry.Id) || [],
     );
     const successfulMessagesBatch = successfulMessages.concat(
-      result?.Successful || []
+      result?.Successful || [],
     );
 
     if (endIndex < messages.length) {
@@ -125,7 +126,7 @@ export class Producer {
         failedMessagesBatch,
         successfulMessagesBatch,
         messages,
-        endIndex
+        endIndex,
       );
     }
 
