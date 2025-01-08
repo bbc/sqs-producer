@@ -165,7 +165,7 @@
     "extensions": [
       "ts"
     ],
-    "spec": "test/tests/**/**/*.test.ts",
+    "spec": "test/**/**/*.test.ts",
     "node-option": [
       "loader=ts-node/esm"
     ]
