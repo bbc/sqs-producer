@@ -15,9 +15,9 @@ To install this package, enter the following command into your terminal (or the 
 npm install sqs-producer
 ```
 
-### Node Version
+### Node version
 
-We will only support Node versions that are actively or security supported by the Node team. If you are still using an Node 14, please use a version of this library before the v3.2.1 release, if you are using Node 16, please use a version before the v3.3.0 release.
+We will only support Node versions that are actively or security supported by the Node team. You can find the list of versions that are actively supported [here](https://nodejs.org/en/about/releases/).
 
 ## Documentation
 
