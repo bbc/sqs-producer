@@ -1,0 +1,21 @@
+packages:
+  - .
+
+catalog:
+  audit-ci: ^7.1.0
+
+catalogMode: prefer
+
+hoist: false
+
+ignoreDepScripts: true
+
+minimumReleaseAge: 10800
+
+minimumReleaseAgeExclude:
+  - '@bbc/*'
+  - '@ibl/*'
+
+recursiveInstall: false
+
+sharedWorkspaceLockfile: false

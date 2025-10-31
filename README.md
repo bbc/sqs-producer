@@ -1,6 +1,6 @@
 # sqs-producer
 
-[![NPM downloads](https://img.shields.io/npm/dm/sqs-producer.svg?style=flat)](https://npmjs.org/package/sqs-producer)
+[![NPM downloads](https://img.shields.io/pnpm/dm/sqs-producer.svg?style=flat)](https://npmjs.org/package/sqs-producer)
 [![Build Status](https://github.com/bbc/sqs-producer/actions/workflows/test.yml/badge.svg)](https://github.com/bbc/sqs-producer/actions/workflows/test.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/maintainability)](https://codeclimate.com/github/bbc/sqs-producer/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5220635a4598c9f1a546/test_coverage)](https://codeclimate.com/github/bbc/sqs-producer/test_coverage)
@@ -12,7 +12,7 @@ Enqueues messages onto a given SQS queue.
 To install this package, enter the following command into your terminal (or the variant of whatever package manager you are using):
 
 ```
-npm install sqs-producer
+pnpm install sqs-producer
 ```
 
 ### Node version
@@ -123,7 +123,7 @@ await producer.send(["msg1", "msg2"]);
 ### Test
 
 ```bash
-npm test
+pnpm test
 ```
 
 ### Coverage
@@ -131,7 +131,7 @@ npm test
 For coverage report, run the command:
 
 ```bash
-npm run coverage
+pnpm run coverage
 ```
 
 ### Lint
@@ -139,7 +139,7 @@ npm run coverage
 To check for problems using ESLint
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 ## Contributing
