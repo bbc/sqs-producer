@@ -29,11 +29,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install Node Modules
-        run: npm ci
+        run: pnpm i --frozen-lockfile
 
       - name: Report Coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: b7dd7a17709f29e70a936a1a9482a9d7c0da56915aec94382436d4e8f9bcb78e
         with:
-          coverageCommand: npm run lcov
+          coverageCommand: pnpm run lcov

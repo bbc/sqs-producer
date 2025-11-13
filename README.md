@@ -12,7 +12,7 @@ Enqueues messages onto a given SQS queue.
 To install this package, enter the following command into your terminal (or the variant of whatever package manager you are using):
 
 ```
-npm install sqs-producer
+pnpm install sqs-producer
 ```
 
 ### Node version
@@ -123,7 +123,7 @@ await producer.send(["msg1", "msg2"]);
 ### Test
 
 ```bash
-npm test
+pnpm test
 ```
 
 ### Coverage
@@ -131,7 +131,7 @@ npm test
 For coverage report, run the command:
 
 ```bash
-npm run coverage
+pnpm run coverage
 ```
 
 ### Lint
@@ -139,7 +139,7 @@ npm run coverage
 To check for problems using ESLint
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 ## Contributing
