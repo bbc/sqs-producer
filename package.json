@@ -31,7 +31,7 @@
     "test:unit:report": "mocha --recursive --full-trace --exit --reporter json > test/reports/test-results.json",
     "watch": "tsc --watch",
     "pretest": "npm run build",
-    "test": "npm run test:unit:report && npm run test:integration",
+    "test": "npm run test:unit:report",
     "coverage": "c8 mocha && c8 report --reporter=html && c8 report --reporter=json-summary",
     "lcov": "c8 mocha && c8 report --reporter=lcov",
     "lint": "eslint .",
@@ -183,7 +183,7 @@
     "extensions": [
       "ts"
     ],
-    "spec": "test/**/**/*.test.ts",
+    "spec": "test/tests/**/**/*.test.ts",
     "node-option": [
       "loader=ts-node/esm"
     ]
