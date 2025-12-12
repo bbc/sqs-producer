@@ -1,6 +1,6 @@
 {
   "name": "sqs-producer",
-  "version": "5.0.0",
+  "version": "8.0.1",
   "description": "Enqueues messages onto a given SQS queue",
   "type": "module",
   "main": "dist/cjs/index.js",
