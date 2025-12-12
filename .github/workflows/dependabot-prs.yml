@@ -7,7 +7,7 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'bbc/sqs-consumer'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'bbc/sqs-producer'
     permissions:
       contents: write
       pull-requests: write
