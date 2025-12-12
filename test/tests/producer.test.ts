@@ -6,7 +6,7 @@ import {
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import { Producer } from "../src/producer.js";
+import { Producer } from "../../src/producer.js";
 
 const sandbox = sinon.createSandbox();
 

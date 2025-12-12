@@ -6,17 +6,18 @@ on:
     types: [opened,closed,synchronize]
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
 
 jobs:
   CLAAssistant:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: "CLA Check"
         if: (github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA') || github.event_name == 'pull_request_target'
-        uses: contributor-assistant/github-action@v2.3.1
+        uses: contributor-assistant/github-action@ca4a40a7d1004f18d9960b404b97e5f30a505a08 # v2.6.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -27,3 +28,4 @@ jobs:
           path-to-document: 'https://bbc.github.io/cla-signatures/cla/v1/cla.html'
           branch: 'main'
           allowlist: bot*
+          custom-allsigned-prcomment: '**CLA CHECK** All Contributors have signed the CLA'

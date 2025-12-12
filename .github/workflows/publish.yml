@@ -1,10 +1,17 @@
 name: Publish Package to npmjs
+
 on:
-  push:
-    branches:
-      - canary
-      - "*.x"
+  workflow_run:
+    workflows:
+      - 'Run Tests'
+    branches: ["canary", "*.x"]
+    types:
+      - completed
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,17 +21,19 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - name: Setup Node.js
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: '22.x'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+      - name: Install Dependencies
+        run: npm ci
+      - name: Audit Signatures
         run: npm audit signatures
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: npm run release

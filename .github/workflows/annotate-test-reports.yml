@@ -1,0 +1,33 @@
+name: Annotate CI run with test results
+on:
+  workflow_run:
+    workflows:
+      - "Run Tests"
+    types:
+      - completed
+permissions:
+  contents: read
+
+jobs:
+  annotate:
+    name: Annotate CI run with test results
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'cancelled' }}
+    permissions:
+      actions: read
+      checks: write
+      pull-requests: write
+    strategy:
+       fail-fast: false
+       matrix:
+        node-version: [20.x, 22.16.0]
+    timeout-minutes: 5
+    steps:
+      - name: Annotate CI run with test results
+        uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2.3.0
+        with:
+          artifact: test-reports-${{ matrix.node-version }}
+          name: Test Results (${{matrix.node-version}}
+          path: "test-results.json"
+          reporter: mocha-json
+          token: ${{ secrets.GITHUB_TOKEN }}

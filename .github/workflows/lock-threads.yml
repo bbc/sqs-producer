@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  issues: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: lock
@@ -15,8 +14,11 @@ concurrency:
 jobs:
   action:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
-      - uses: dessant/lock-threads@v4
+      - uses: dessant/lock-threads@1bf7ec25051fe7c00bdd17e6a7cf3d7bfb7dc771 # v5.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-inactive-days: "30" # Lock issues after 30 days of being closed
