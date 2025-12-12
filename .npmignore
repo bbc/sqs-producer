@@ -1,8 +1,8 @@
 node_modules
-coverage.html
-lib-cov
-coverage/
-.nyc_output/
+coverage
+*.log
+.vscode
+examples
 test
 public
 .nyc_output
