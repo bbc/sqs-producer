@@ -41,7 +41,7 @@ jobs:
       - name: Run Tests and Linting
         run: npm run test
 
-      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: test-reports-${{ matrix.node-version }}
           path: test/reports/
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       
       - name: Setup Bun
-        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+        uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2.1.0
 
       - name: Install Bun Packages
         run: bun install --no-save
