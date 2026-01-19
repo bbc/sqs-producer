@@ -152,32 +152,32 @@
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.2",
-    "@semantic-release/npm": "^13.1.2",
+    "@semantic-release/npm": "^13.1.3",
     "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.0.1",
+    "@types/node": "^25.0.3",
     "@types/sinon": "^21.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.49.0",
-    "chai": "^6.2.1",
+    "chai": "^6.2.2",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-eslint": "^13.0.0",
     "mocha": "^11.7.5",
     "c8": "^10.1.3",
     "prettier": "^3.7.4",
     "semantic-release": "^25.0.2",
-    "sinon": "^21.0.0",
+    "sinon": "^21.0.1",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.15",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.914.0"
+    "@aws-sdk/client-sqs": "^3.962.0"
   },
   "peerDependencies": {
-    "@aws-sdk/client-sqs": "^3.914.0"
+    "@aws-sdk/client-sqs": "^3.962.0"
   },
   "mocha": {
     "extensions": [

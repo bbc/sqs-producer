@@ -82,6 +82,25 @@ await producer.send({
   groupId: "group1234",
   deduplicationId: "abcdef123456", // typically a hash of the message body
 });
+
+// send messages to a standard queue with groupId for fair queue behavior
+//
+// Fair queues automatically mitigate noisy neighbor impact in multi-tenant queues
+// by using groupId to identify tenants and ensure fair resource allocation
+//
+// https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fair-queues.html
+await producer.send([
+  {
+    id: "msg1",
+    body: "Message from tenant A",
+    groupId: "tenant-a",
+  },
+  {
+    id: "msg2",
+    body: "Message from tenant B",
+    groupId: "tenant-b",
+  },
+]);
 ```
 
 ### Credentials

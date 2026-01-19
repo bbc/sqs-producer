@@ -39,9 +39,9 @@ export interface Message {
    */
   body: string;
   /**
-   * This parameter applies only to FIFO (first-in-first-out) queues.
-   * When set messages that belong to the same message group are processed
-   * in a FIFO manner
+   * The message group ID. For FIFO queues, messages with the same group ID
+   * are processed in order. For fair queues, messages are grouped together
+   * while ensuring fair distribution across different group IDs.
    */
   groupId?: string;
   /**
