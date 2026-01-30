@@ -156,7 +156,7 @@
     "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "@types/sinon": "^21.0.0",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
