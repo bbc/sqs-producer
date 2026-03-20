@@ -1,10 +1,7 @@
-import {
-  SQSClient,
-  SendMessageBatchCommand,
-  GetQueueAttributesCommand,
-} from "@aws-sdk/client-sqs";
+import { SQSClient, SendMessageBatchCommand, GetQueueAttributesCommand } from "@aws-sdk/client-sqs";
 import { assert } from "chai";
 import * as sinon from "sinon";
+import { afterEach, beforeEach, describe, it } from "vitest";
 
 import { Producer } from "../../src/producer.js";
 
@@ -36,10 +33,7 @@ describe("Producer", () => {
     sandbox.restore();
   });
 
-  async function rejects(
-    producerResponse: Promise<string[]>,
-    errMessage: string,
-  ): Promise<void> {
+  async function rejects(producerResponse: Promise<string[]>, errMessage: string): Promise<void> {
     let thrown = false;
     try {
       await producerResponse;
@@ -215,19 +209,7 @@ describe("Producer", () => {
   });
 
   it("makes multiple batch requests when the number of messages is larger than 10", async () => {
-    await producer.send([
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-    ]);
+    await producer.send(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]);
     sandbox.assert.calledTwice(sqs.send);
   });
 
@@ -285,8 +267,7 @@ describe("Producer", () => {
   });
 
   it("returns an error when object messages have invalid delaySeconds params 1", async () => {
-    const errMessage =
-      "Message.delaySeconds value must be a number contained within [0 - 900]";
+    const errMessage = "Message.delaySeconds value must be a number contained within [0 - 900]";
 
     const message1 = {
       id: "id1",
@@ -302,8 +283,7 @@ describe("Producer", () => {
   });
 
   it("returns an error when object messages have invalid delaySeconds params 2", async () => {
-    const errMessage =
-      "Message.delaySeconds value must be a number contained within [0 - 900]";
+    const errMessage = "Message.delaySeconds value must be a number contained within [0 - 900]";
 
     const message1 = {
       id: "id1",
@@ -339,8 +319,7 @@ describe("Producer", () => {
   });
 
   it("returns an error when object messages attributes have an invalid DataType param", async () => {
-    const errMessage =
-      "The DataType key of a MessageAttribute must be a String";
+    const errMessage = "The DataType key of a MessageAttribute must be a String";
 
     const message1 = {
       id: "id1",
