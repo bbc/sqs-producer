@@ -46,11 +46,7 @@ export class Producer {
 
     const result = await this.sqs.send(command);
 
-    return Number(
-      result &&
-        result.Attributes &&
-        result.Attributes.ApproximateNumberOfMessages,
-    );
+    return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
   /**
@@ -66,12 +62,7 @@ export class Producer {
     const startIndex = 0;
     const messagesArr = !Array.isArray(messages) ? [messages] : messages;
 
-    return this.sendBatch(
-      failedMessages,
-      successfulMessages,
-      messagesArr,
-      startIndex,
-    );
+    return this.sendBatch(failedMessages, successfulMessages, messagesArr, startIndex);
   }
 
   /**
@@ -117,17 +108,10 @@ export class Producer {
     const failedMessagesBatch = failedMessages.concat(
       result?.Failed?.map((entry) => entry.Id) || [],
     );
-    const successfulMessagesBatch = successfulMessages.concat(
-      result?.Successful || [],
-    );
+    const successfulMessagesBatch = successfulMessages.concat(result?.Successful || []);
 
     if (endIndex < messages.length) {
-      return this.sendBatch(
-        failedMessagesBatch,
-        successfulMessagesBatch,
-        messages,
-        endIndex,
-      );
+      return this.sendBatch(failedMessagesBatch, successfulMessagesBatch, messages, endIndex);
     }
 
     if (failedMessagesBatch.length === 0) {

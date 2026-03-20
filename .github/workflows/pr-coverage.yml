@@ -4,7 +4,7 @@ on:
     branches:
       - canary
       - "*.x"
-      - 'main'
+      - "main"
 permissions:
   contents: read
 
@@ -21,10 +21,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Node Modules
         run: npm ci
@@ -36,7 +36,7 @@ jobs:
         uses: hrishikesh-kadam/setup-lcov@6c1aa0cc9e1c02f9f58f01ac599f1064ccc83470 # v1.1.0
 
       - name: Report code coverage
-        uses: zgosalvez/github-actions-report-lcov@5415270bac89e8c935f5bfeb8d6061af8f958423 # v7.0.2
+        uses: zgosalvez/github-actions-report-lcov@3df2a2c4b06b3c7a4ab97e8936f7a7d62712dad3 # v7.0.7
         with:
           coverage-files: coverage/lcov.info
           minimum-coverage: 90
