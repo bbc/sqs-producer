@@ -1,85 +1,85 @@
 {
-    "branches": [
-      "main",
-      "*.x",
+  "branches": [
+    "main",
+    "*.x",
+    {
+      "name": "canary",
+      "prerelease": true
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
       {
-        "name": "canary",
-        "prerelease": true
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          {
+            "type": "breaking",
+            "release": "major"
+          },
+          {
+            "type": "feat",
+            "release": "minor"
+          },
+          {
+            "type": "chore",
+            "release": "patch"
+          },
+          {
+            "type": "fix",
+            "release": "patch"
+          },
+          {
+            "type": "docs",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          },
+          {
+            "type": "test",
+            "release": "patch"
+          }
+        ]
       }
     ],
-    "plugins": [
-      [
-        "@semantic-release/commit-analyzer",
-        {
-          "preset": "conventionalcommits",
-          "releaseRules": [
-            {
-              "type": "breaking",
-              "release": "major"
-            },
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
             {
               "type": "feat",
-              "release": "minor"
-            },
-            {
-              "type": "chore",
-              "release": "patch"
+              "section": "Features"
             },
             {
               "type": "fix",
-              "release": "patch"
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "chore",
+              "section": "Chores"
             },
             {
               "type": "docs",
-              "release": "patch"
+              "section": "Documentation"
             },
             {
               "type": "refactor",
-              "release": "patch"
+              "section": "Refactors"
             },
             {
               "type": "test",
-              "release": "patch"
+              "section": "Tests"
             }
           ]
         }
-      ],
-      [
-        "@semantic-release/release-notes-generator",
-        {
-          "preset": "conventionalcommits",
-          "presetConfig": {
-            "types": [
-              {
-                "type": "feat",
-                "section": "Features"
-              },
-              {
-                "type": "fix",
-                "section": "Bug Fixes"
-              },
-              {
-                "type": "chore",
-                "section": "Chores"
-              },
-              {
-                "type": "docs",
-                "section": "Documentation"
-              },
-              {
-                "type": "refactor",
-                "section": "Refactors"
-              },
-              {
-                "type": "test",
-                "section": "Tests"
-              }
-            ]
-          }
-        }
-      ],
-      "@semantic-release/changelog",
-      "@semantic-release/github",
-      "@semantic-release/npm"
-    ]
-  }
+      }
+    ],
+    "@semantic-release/changelog",
+    "@semantic-release/github",
+    "@semantic-release/npm"
+  ]
+}

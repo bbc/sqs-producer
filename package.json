@@ -2,6 +2,21 @@
   "name": "sqs-producer",
   "version": "5.0.0",
   "description": "Enqueues messages onto a given SQS queue",
+  "keywords": [
+    "aws",
+    "producer",
+    "queue",
+    "sqs"
+  ],
+  "homepage": "https://bbc.github.io/sqs-producer/",
+  "bugs": {
+    "url": "https://github.com/bbc/sqs-producer/issues"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bbc/sqs-producer.git"
+  },
   "type": "module",
   "main": "dist/cjs/index.js",
   "types": "dist/cjs/index.d.ts",
@@ -17,8 +32,8 @@
       }
     }
   },
-  "engines": {
-    "node": ">=20.0.0"
+  "publishConfig": {
+    "provenance": true
   },
   "scripts": {
     "clean": "rm -fr dist/*",
@@ -42,26 +57,8 @@
     "check": "npm run lint && npm run format:check && npm run typecheck && npm run test",
     "generate-docs": "typedoc"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bbc/sqs-producer.git"
-  },
-  "bugs": {
-    "url": "https://github.com/bbc/sqs-producer/issues"
-  },
-  "homepage": "https://bbc.github.io/sqs-producer/",
-  "keywords": [
-    "aws",
-    "sqs",
-    "producer",
-    "queue"
-  ],
-  "license": "Apache-2.0",
-  "publishConfig": {
-    "provenance": true
-  },
-  "overrides": {
-    "cross-spawn": "^7.0.3"
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.989.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -86,29 +83,32 @@
     "typedoc": "^0.28.17",
     "typescript": "^5.9.3"
   },
-  "dependencies": {
-    "@aws-sdk/client-sqs": "^3.989.0"
-  },
   "peerDependencies": {
     "@aws-sdk/client-sqs": "^3.989.0"
+  },
+  "overrides": {
+    "cross-spawn": "^7.0.3"
   },
   "mocha": {
     "extensions": [
       "ts"
     ],
-    "spec": "test/tests/**/**/*.test.ts",
     "node-option": [
       "loader=ts-node/esm"
-    ]
+    ],
+    "spec": "test/tests/**/**/*.test.ts"
   },
   "c8": {
-    "include": [
-      "src/**/*.ts"
-    ],
     "extension": [
       ".ts"
     ],
-    "sourceMap": true,
-    "instrument": true
+    "include": [
+      "src/**/*.ts"
+    ],
+    "instrument": true,
+    "sourceMap": true
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
