@@ -1,6 +1,7 @@
 import { SQSClient, SendMessageBatchCommand, GetQueueAttributesCommand } from "@aws-sdk/client-sqs";
 import { assert } from "chai";
 import * as sinon from "sinon";
+import { afterEach, beforeEach, describe, it } from "vitest";
 
 import { Producer } from "../../src/producer.js";
 
