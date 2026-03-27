@@ -79,7 +79,7 @@
     "sinon": "^21.0.1",
     "typedoc": "^0.28.17",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.18"
   },
   "peerDependencies": {
     "@aws-sdk/client-sqs": "^3.989.0"
