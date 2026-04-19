@@ -1,3 +1,9 @@
+## [8.0.9-canary.3](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.2...v8.0.9-canary.3) (2026-04-19)
+
+### Chores
+
+* add oxlint config ([ea54cfe](https://github.com/bbc/sqs-producer/commit/ea54cfed2b931b5251d9afa198613bd850b4759a))
+
 ## [8.0.9-canary.2](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.1...v8.0.9-canary.2) (2026-04-19)
 
 ### Chores
