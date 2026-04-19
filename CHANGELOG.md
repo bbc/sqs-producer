@@ -1,3 +1,9 @@
+## [8.0.9-canary.4](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.3...v8.0.9-canary.4) (2026-04-19)
+
+### Chores
+
+* adding formatting config ([ee1aed2](https://github.com/bbc/sqs-producer/commit/ee1aed2af5308230b1c3e5a3e5e36954eba2d5f9))
+
 ## [8.0.9-canary.3](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.2...v8.0.9-canary.3) (2026-04-19)
 
 ### Chores
