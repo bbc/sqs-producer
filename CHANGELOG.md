@@ -1,3 +1,9 @@
+## [8.0.9-canary.2](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.1...v8.0.9-canary.2) (2026-04-19)
+
+### Chores
+
+* update deps ([8806c81](https://github.com/bbc/sqs-producer/commit/8806c81ba016d2772f74d0f9ad1e97d01ae67a76))
+
 ## [8.0.9-canary.1](https://github.com/bbc/sqs-producer/compare/v8.0.8...v8.0.9-canary.1) (2026-04-19)
 
 ### Chores
