@@ -3,13 +3,13 @@
   "version": "8.0.1",
   "description": "Enqueues messages onto a given SQS queue",
   "keywords": [
-    "sqs",
     "aws-sqs",
-    "queue-producer",
-    "message-queue",
     "backend",
+    "message-queue",
+    "nodejs",
+    "queue-producer",
     "serverless",
-    "nodejs"
+    "sqs"
   ],
   "homepage": "https://bbc.github.io/sqs-producer/",
   "bugs": {
