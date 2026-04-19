@@ -1,6 +1,6 @@
 {
   "name": "sqs-producer",
-  "version": "8.0.1",
+  "version": "8.0.9-canary.1",
   "description": "Enqueues messages onto a given SQS queue",
   "keywords": [
     "aws-sqs",
