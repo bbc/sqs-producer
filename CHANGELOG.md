@@ -1,3 +1,18 @@
+## [9.0.1](https://github.com/bbc/sqs-producer/compare/v9.0.0...v9.0.1) (2026-05-02)
+
+### Chores
+
+* begin move to a single branch ([a4c9388](https://github.com/bbc/sqs-producer/commit/a4c938804e353c70f42a12274f1f3fdd3ca1b7de))
+* change to direct from main ([bfa349c](https://github.com/bbc/sqs-producer/commit/bfa349c8724f012ea2c251d92f3cbafc20d6df51))
+* **deps-dev:** bump oxfmt from 0.41.0 to 0.45.0 ([#228](https://github.com/bbc/sqs-producer/issues/228)) ([727930d](https://github.com/bbc/sqs-producer/commit/727930d76ec4ce513bfab1f7eca99ec63da2f25a))
+* **deps:** bump actions/setup-node from 6.3.0 to 6.4.0 ([#225](https://github.com/bbc/sqs-producer/issues/225)) ([f2ffb03](https://github.com/bbc/sqs-producer/commit/f2ffb03936f28c7dfde55fef327f51802c0f86d6))
+* **deps:** bump dependabot/fetch-metadata from 3.0.0 to 3.1.0 ([#226](https://github.com/bbc/sqs-producer/issues/226)) ([b300ee8](https://github.com/bbc/sqs-producer/commit/b300ee8542cd643fe7c96e9c0077487b32341fe5))
+* force to commonjs ([ac2feda](https://github.com/bbc/sqs-producer/commit/ac2feda3e466a4319c7dc63ad6dfac80d0543396))
+* formatting ([b2a25aa](https://github.com/bbc/sqs-producer/commit/b2a25aa1f693f20a83e91aeaa4e5dc100aa287dd))
+* **release:** 9.0.0-canary.2 [skip ci] ([c2b9d4e](https://github.com/bbc/sqs-producer/commit/c2b9d4ed123baae4d0fb0a344fc12d77437fd86b)), closes [#228](https://github.com/bbc/sqs-producer/issues/228) [#225](https://github.com/bbc/sqs-producer/issues/225) [#226](https://github.com/bbc/sqs-producer/issues/226)
+* remove jsr release ([16e4afc](https://github.com/bbc/sqs-producer/commit/16e4afc9d34d29e61b5a167808346f34b84df34a))
+* update ([d9a0274](https://github.com/bbc/sqs-producer/commit/d9a0274cd0bc8ea7797d0c95f7219364dda4e0e1))
+
 ## [9.0.0](https://github.com/bbc/sqs-producer/compare/v8.0.9...v9.0.0) (2026-05-02)
 
 ### Chores
