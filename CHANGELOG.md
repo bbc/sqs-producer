@@ -1,3 +1,5 @@
+## [9.0.0-canary.1](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.5...v9.0.0-canary.1) (2026-05-02)
+
 ## [8.0.9-canary.5](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.4...v8.0.9-canary.5) (2026-05-02)
 
 ### Chores
