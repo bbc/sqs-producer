@@ -1,3 +1,11 @@
+## [8.0.9-canary.5](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.4...v8.0.9-canary.5) (2026-05-02)
+
+### Chores
+
+* adjusting node versions per lts only support ([#233](https://github.com/bbc/sqs-producer/issues/233)) ([cea6142](https://github.com/bbc/sqs-producer/commit/cea61427e9547ac7d9f649b4a395f0078c7c4baf))
+* **deps-dev:** bump typedoc from 0.28.18 to 0.28.19 ([#227](https://github.com/bbc/sqs-producer/issues/227)) ([6446f91](https://github.com/bbc/sqs-producer/commit/6446f91f38314859fca83fecf756aaef988e2f53))
+* **deps:** bump zgosalvez/github-actions-report-lcov ([#232](https://github.com/bbc/sqs-producer/issues/232)) ([2b523ef](https://github.com/bbc/sqs-producer/commit/2b523ef6ee29fb7b15d41e0e4a2e32818f1c5d30))
+
 ## [8.0.9-canary.4](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.3...v8.0.9-canary.4) (2026-04-19)
 
 ### Chores
