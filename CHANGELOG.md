@@ -1,3 +1,11 @@
+## [9.0.0-canary.2](https://github.com/bbc/sqs-producer/compare/v9.0.0-canary.1...v9.0.0-canary.2) (2026-05-02)
+
+### Chores
+
+* **deps-dev:** bump oxfmt from 0.41.0 to 0.45.0 ([#228](https://github.com/bbc/sqs-producer/issues/228)) ([727930d](https://github.com/bbc/sqs-producer/commit/727930d76ec4ce513bfab1f7eca99ec63da2f25a))
+* **deps:** bump actions/setup-node from 6.3.0 to 6.4.0 ([#225](https://github.com/bbc/sqs-producer/issues/225)) ([f2ffb03](https://github.com/bbc/sqs-producer/commit/f2ffb03936f28c7dfde55fef327f51802c0f86d6))
+* **deps:** bump dependabot/fetch-metadata from 3.0.0 to 3.1.0 ([#226](https://github.com/bbc/sqs-producer/issues/226)) ([b300ee8](https://github.com/bbc/sqs-producer/commit/b300ee8542cd643fe7c96e9c0077487b32341fe5))
+
 ## [9.0.0-canary.1](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.5...v9.0.0-canary.1) (2026-05-02)
 
 ## [8.0.9-canary.5](https://github.com/bbc/sqs-producer/compare/v8.0.9-canary.4...v8.0.9-canary.5) (2026-05-02)
