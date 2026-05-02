@@ -47,6 +47,5 @@ module.exports = {
       },
     ],
     "@semantic-release/github",
-    "@sebbo2002/semantic-release-jsr",
   ],
 };
