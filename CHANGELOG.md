@@ -1,3 +1,11 @@
+## [9.0.2](https://github.com/bbc/sqs-producer/compare/v9.0.1...v9.0.2) (2026-05-08)
+
+### Chores
+
+* **deps:** bump github/codeql-action from 4.35.2 to 4.35.3 ([#234](https://github.com/bbc/sqs-producer/issues/234)) ([2a7c156](https://github.com/bbc/sqs-producer/commit/2a7c156be9a65e0af67807bb82cc10a3c2ee6541))
+* **deps:** bump github/codeql-action from 4.35.3 to 4.35.4 ([#238](https://github.com/bbc/sqs-producer/issues/238)) ([99e2d54](https://github.com/bbc/sqs-producer/commit/99e2d54c244c329f18d29fc17a02680b9bc97fa3))
+* update security policy ([740ecc6](https://github.com/bbc/sqs-producer/commit/740ecc6845463c8571683d3ec44bac48e732d1a5))
+
 ## [9.0.1](https://github.com/bbc/sqs-producer/compare/v9.0.0...v9.0.1) (2026-05-02)
 
 ### Chores
