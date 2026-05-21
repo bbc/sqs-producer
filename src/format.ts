@@ -1,7 +1,7 @@
 import type { SendMessageBatchRequestEntry } from "@aws-sdk/client-sqs";
 
 import type { Message } from "./types.js";
-import { isObject, isString, isMessageAttributeValid } from "./validation.js";
+import { isDelaySecondsValid, isObject, isString, isMessageAttributeValid } from "./validation.js";
 
 /**
  * Converts a message object to a SendMessageBatchRequestEntry
@@ -34,14 +34,8 @@ function entryFromObject(message: Message): SendMessageBatchRequestEntry {
   };
 
   if (message.delaySeconds) {
-    if (
-      typeof message.delaySeconds !== "number" ||
-      message.delaySeconds < 0 ||
-      message.delaySeconds > 900
-    ) {
-      throw new Error(
-        "Message.delaySeconds value must be a number contained within [0 - 900]",
-      );
+    if (!isDelaySecondsValid(message.delaySeconds)) {
+      throw new Error("Message.delaySeconds value must be a number contained within [0 - 900]");
     }
 
     entry.DelaySeconds = message.delaySeconds;
@@ -92,9 +86,7 @@ function entryFromString(message: string): SendMessageBatchRequestEntry {
  * depending on if the message is a string or an object
  * @param message The message to convert
  */
-export function toEntry(
-  message: string | Message,
-): SendMessageBatchRequestEntry {
+export function toEntry(message: string | Message): SendMessageBatchRequestEntry {
   if (isString(message)) {
     return entryFromString(message as string);
   }

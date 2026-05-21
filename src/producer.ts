@@ -25,13 +25,17 @@ export class Producer {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
-    this.sqs =
-      options.sqs ||
-      new SQSClient({
+    if (options.sqs) {
+      this.sqs = options.sqs;
+    } else {
+      const useQueueUrlAsEndpoint = options.useQueueUrlAsEndpoint ?? true;
+      const region = options.region || process.env.AWS_REGION || "eu-west-1";
+      this.sqs = new SQSClient({
         ...options,
-        useQueueUrlAsEndpoint: options.useQueueUrlAsEndpoint ?? true,
-        region: options.region || process.env.AWS_REGION || "eu-west-1",
+        useQueueUrlAsEndpoint,
+        region,
       });
+    }
   }
 
   /**
@@ -46,11 +50,7 @@ export class Producer {
 
     const result = await this.sqs.send(command);
 
-    return Number(
-      result &&
-        result.Attributes &&
-        result.Attributes.ApproximateNumberOfMessages,
-    );
+    return Number(result && result.Attributes && result.Attributes.ApproximateNumberOfMessages);
   }
 
   /**
@@ -66,12 +66,7 @@ export class Producer {
     const startIndex = 0;
     const messagesArr = !Array.isArray(messages) ? [messages] : messages;
 
-    return this.sendBatch(
-      failedMessages,
-      successfulMessages,
-      messagesArr,
-      startIndex,
-    );
+    return this.sendBatch(failedMessages, successfulMessages, messagesArr, startIndex);
   }
 
   /**
@@ -117,17 +112,10 @@ export class Producer {
     const failedMessagesBatch = failedMessages.concat(
       result?.Failed?.map((entry) => entry.Id) || [],
     );
-    const successfulMessagesBatch = successfulMessages.concat(
-      result?.Successful || [],
-    );
+    const successfulMessagesBatch = successfulMessages.concat(result?.Successful || []);
 
     if (endIndex < messages.length) {
-      return this.sendBatch(
-        failedMessagesBatch,
-        successfulMessagesBatch,
-        messages,
-        endIndex,
-      );
+      return this.sendBatch(failedMessagesBatch, successfulMessagesBatch, messages, endIndex);
     }
 
     if (failedMessagesBatch.length === 0) {

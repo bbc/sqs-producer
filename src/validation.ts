@@ -14,6 +14,10 @@ export function isObject(value: any): boolean {
   return value && typeof value === "object" && value instanceof Object;
 }
 
+export function isDelaySecondsValid(delaySeconds: unknown): boolean {
+  return typeof delaySeconds === "number" && delaySeconds >= 0 && delaySeconds <= 900;
+}
+
 /**
  * Checks if a MessageAttribute is valid
  * @param messageAttribute - The MessageAttribute to check

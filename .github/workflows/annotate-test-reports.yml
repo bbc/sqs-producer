@@ -18,16 +18,16 @@ jobs:
       checks: write
       pull-requests: write
     strategy:
-       fail-fast: false
-       matrix:
-        node-version: [20.x, 22.16.0]
+      fail-fast: false
+      matrix:
+        node-version: [22.x, 24.x]
     timeout-minutes: 5
     steps:
       - name: Annotate CI run with test results
-        uses: dorny/test-reporter@3d76b34a4535afbd0600d347b09a6ee5deb3ed7f # v2.6.0
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
         with:
           artifact: test-reports-${{ matrix.node-version }}
           name: Test Results (${{matrix.node-version}}
-          path: "test-results.json"
-          reporter: mocha-json
+          path: "test-results.xml"
+          reporter: java-junit
           token: ${{ secrets.GITHUB_TOKEN }}
