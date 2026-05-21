@@ -1,3 +1,19 @@
+## [9.0.3](https://github.com/bbc/sqs-producer/compare/v9.0.2...v9.0.3) (2026-05-21)
+
+### Chores
+
+* **deps:** bump github/codeql-action from 4.35.4 to 4.35.5 ([#241](https://github.com/bbc/sqs-producer/issues/241)) ([a97292c](https://github.com/bbc/sqs-producer/commit/a97292ce685d024e359bb216e97e2efa8eeb2256))
+* **deps:** bump zgosalvez/github-actions-report-lcov ([#240](https://github.com/bbc/sqs-producer/issues/240)) ([f82cdf2](https://github.com/bbc/sqs-producer/commit/f82cdf2f4bedd62a8c1f83da2acd49dd8387cea1))
+* remove unused workflow ([c49fc51](https://github.com/bbc/sqs-producer/commit/c49fc51a40f90c48c598fa44203921a62672cd93))
+
+## [9.0.2](https://github.com/bbc/sqs-producer/compare/v9.0.1...v9.0.2) (2026-05-08)
+
+### Chores
+
+* **deps:** bump github/codeql-action from 4.35.2 to 4.35.3 ([#234](https://github.com/bbc/sqs-producer/issues/234)) ([2a7c156](https://github.com/bbc/sqs-producer/commit/2a7c156be9a65e0af67807bb82cc10a3c2ee6541))
+* **deps:** bump github/codeql-action from 4.35.3 to 4.35.4 ([#238](https://github.com/bbc/sqs-producer/issues/238)) ([99e2d54](https://github.com/bbc/sqs-producer/commit/99e2d54c244c329f18d29fc17a02680b9bc97fa3))
+* update security policy ([740ecc6](https://github.com/bbc/sqs-producer/commit/740ecc6845463c8571683d3ec44bac48e732d1a5))
+
 ## [9.0.1](https://github.com/bbc/sqs-producer/compare/v9.0.0...v9.0.1) (2026-05-02)
 
 ### Chores
