@@ -25,13 +25,17 @@ export class Producer {
     this.validate(options);
     this.queueUrl = options.queueUrl;
     this.batchSize = options.batchSize || 10;
-    this.sqs =
-      options.sqs ||
-      new SQSClient({
+    if (options.sqs) {
+      this.sqs = options.sqs;
+    } else {
+      const useQueueUrlAsEndpoint = options.useQueueUrlAsEndpoint ?? true;
+      const region = options.region || process.env.AWS_REGION || "eu-west-1";
+      this.sqs = new SQSClient({
         ...options,
-        useQueueUrlAsEndpoint: options.useQueueUrlAsEndpoint ?? true,
-        region: options.region || process.env.AWS_REGION || "eu-west-1",
+        useQueueUrlAsEndpoint,
+        region,
       });
+    }
   }
 
   /**
