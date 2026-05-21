@@ -1,3 +1,12 @@
+## [9.0.4](https://github.com/bbc/sqs-producer/compare/v9.0.3...v9.0.4) (2026-05-21)
+
+### Chores
+
+* **deps-dev:** bump @vitest/coverage-v8 from 3.2.4 to 4.1.3 ([#235](https://github.com/bbc/sqs-producer/issues/235)) ([8c28e37](https://github.com/bbc/sqs-producer/commit/8c28e37a5849d570cc3fd7089bb985d504097598))
+* **deps-dev:** bump oxlint from 1.56.0 to 1.62.0 ([#236](https://github.com/bbc/sqs-producer/issues/236)) ([647342d](https://github.com/bbc/sqs-producer/commit/647342d4666578bdee1e21bb648b5c07d5420d03))
+* **deps-dev:** bump vitest from 3.2.4 to 4.1.3 ([#237](https://github.com/bbc/sqs-producer/issues/237)) ([e67cf13](https://github.com/bbc/sqs-producer/commit/e67cf135c537d56f719c7d0d0ce167c1f830bd26))
+* **deps:** bump actions/dependency-review-action from 4.9.0 to 5.0.0 ([#239](https://github.com/bbc/sqs-producer/issues/239)) ([0f0ee49](https://github.com/bbc/sqs-producer/commit/0f0ee4959fef892860555578a577011b0176e50a))
+
 ## [9.0.3](https://github.com/bbc/sqs-producer/compare/v9.0.2...v9.0.3) (2026-05-21)
 
 ### Chores
