@@ -1,3 +1,10 @@
+## [9.0.5](https://github.com/bbc/sqs-producer/compare/v9.0.4...v9.0.5) (2026-05-21)
+
+### Chores
+
+* **deps:** bump @aws-sdk/client-sqs from 3.971.0 to 3.991.0 ([#184](https://github.com/bbc/sqs-producer/issues/184)) ([75e1672](https://github.com/bbc/sqs-producer/commit/75e1672f2703fae7ec29c8a039a9b448ae94de9a))
+* updating brace-expansion ([de3e818](https://github.com/bbc/sqs-producer/commit/de3e81865e559d0d287c1af5135cba65aaba3798))
+
 ## [9.0.4](https://github.com/bbc/sqs-producer/compare/v9.0.3...v9.0.4) (2026-05-21)
 
 ### Chores
