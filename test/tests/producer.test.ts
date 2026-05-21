@@ -460,6 +460,13 @@ describe("Producer", () => {
   });
 
   describe(".create", () => {
+    it("creates a default SQS client when one is not supplied", () => {
+      const producerInstance = Producer.create({
+        queueUrl,
+      });
+      assert(producerInstance.sqs instanceof SQSClient);
+    });
+
     it("creates a new instance of a Producer", () => {
       const producerInstance = Producer.create({
         queueUrl,
