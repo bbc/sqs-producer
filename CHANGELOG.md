@@ -1,3 +1,9 @@
+## 9.0.6
+
+### Patch Changes
+
+- chore: upgrading dependencies including typescipt and the aws-sdk
+
 ## [9.0.5](https://github.com/bbc/sqs-producer/compare/v9.0.4...v9.0.5) (2026-05-21)
 
 ### Chores
