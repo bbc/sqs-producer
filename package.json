@@ -67,12 +67,12 @@
   "devDependencies": {
     "@types/chai": "^5.2.3",
     "@types/node": "^25.5.0",
-    "@types/sinon": "^21.0.1",
+    "@types/sinon": "^22.0.0",
     "@vitest/coverage-v8": "^4.1.11",
     "chai": "^6.2.2",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.62.0",
-    "sinon": "^21.0.3",
+    "sinon": "^22.1.0",
     "typedoc": "^0.28.20",
     "typescript": "^5.9.3",
     "vitest": "^4.1.3"
