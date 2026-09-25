@@ -1,0 +1,4 @@
+sqs-producer@9.0.6:
+  dir: ""
+  intents:
+    - purple-donkeys-open
