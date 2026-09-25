@@ -44,7 +44,8 @@
     "add-package-jsons": "node ./scripts/addPackageJsons.js",
     "build": "npm run clean && npm run compile && npm run add-package-jsons",
     "prepublishOnly": "npm run build",
-    "release": "semantic-release",
+    "release:validate": "node ./scripts/release.js validate",
+    "release:notes": "node ./scripts/release.js notes",
     "test:unit": "vitest run",
     "test:unit:report": "vitest run --reporter=junit --outputFile=test/reports/test-results.xml",
     "watch": "tsc --watch",
@@ -64,21 +65,13 @@
     "@aws-sdk/client-sqs": "^3.1036.0"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^12.0.6",
-    "@semantic-release/npm": "^13.1.5",
-    "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/chai": "^5.2.3",
     "@types/node": "^25.5.0",
     "@types/sinon": "^21.0.1",
     "@vitest/coverage-v8": "^4.1.11",
     "chai": "^6.2.2",
-    "conventional-changelog-conventionalcommits": "^9.3.0",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.62.0",
-    "semantic-release": "^25.0.3",
     "sinon": "^21.0.3",
     "typedoc": "^0.28.20",
     "typescript": "^5.9.3",
@@ -92,5 +85,6 @@
   },
   "engines": {
     "node": ">=22.0.0"
-  }
+  },
+  "packageManager": "pnpm@12.6.0"
 }
