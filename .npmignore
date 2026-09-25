@@ -8,5 +8,7 @@ public
 .nyc_output
 scripts
 .github
+.changeset
+pnpm-workspace.yaml
 jsr.json
 typdoc.json

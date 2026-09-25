@@ -18,7 +18,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bbc/sqs-producer.git"
+    "url": "git+https://github.com/bbc/sqs-producer.git"
   },
   "type": "module",
   "main": "dist/cjs/index.js",
