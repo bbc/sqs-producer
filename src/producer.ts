@@ -9,7 +9,7 @@ import type { Message, ProducerOptions } from "./types.js";
 import { toEntry } from "./format.js";
 import { FailedMessagesError } from "./errors.js";
 
-const requiredOptions = ["queueUrl"];
+const requiredOptions = ["queueUrl"] as const;
 
 /**
  * [Usage](https://bbc.github.io/sqs-producer/index.html#usage)
@@ -61,8 +61,8 @@ export class Producer {
   async send(
     messages: string | Message | (string | Message)[],
   ): Promise<SendMessageBatchResultEntry[]> {
-    const failedMessages = [];
-    const successfulMessages = [];
+    const failedMessages: string[] = [];
+    const successfulMessages: SendMessageBatchResultEntry[] = [];
     const startIndex = 0;
     const messagesArr = !Array.isArray(messages) ? [messages] : messages;
 
@@ -80,7 +80,7 @@ export class Producer {
         throw new Error(`Missing SQS producer option [${option}].`);
       }
     }
-    if (options.batchSize > 10 || options.batchSize < 1) {
+    if (options.batchSize !== undefined && (options.batchSize > 10 || options.batchSize < 1)) {
       throw new Error("SQS batchSize option must be between 1 and 10.");
     }
   }
@@ -95,10 +95,10 @@ export class Producer {
    * @throws FailedMessagesError
    */
   private async sendBatch(
-    failedMessages?: string[],
-    successfulMessages?: SendMessageBatchResultEntry[],
-    messages?: (string | Message)[],
-    startIndex?: number,
+    failedMessages: string[],
+    successfulMessages: SendMessageBatchResultEntry[],
+    messages: (string | Message)[],
+    startIndex: number,
   ): Promise<SendMessageBatchResultEntry[]> {
     const endIndex = startIndex + this.batchSize;
     const batch = messages.slice(startIndex, endIndex);
@@ -110,7 +110,7 @@ export class Producer {
     const command = new SendMessageBatchCommand(params);
     const result = await this.sqs.send(command);
     const failedMessagesBatch = failedMessages.concat(
-      result?.Failed?.map((entry) => entry.Id) || [],
+      result?.Failed?.flatMap((entry) => (entry.Id === undefined ? [] : [entry.Id])) || [],
     );
     const successfulMessagesBatch = successfulMessages.concat(result?.Successful || []);
 
