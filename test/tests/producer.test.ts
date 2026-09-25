@@ -1,14 +1,25 @@
-import { SQSClient, SendMessageBatchCommand, GetQueueAttributesCommand } from "@aws-sdk/client-sqs";
-import { assert } from "chai";
-import * as sinon from "sinon";
-import { afterEach, beforeEach, describe, it } from "vitest";
+import {
+  SQSClient,
+  SendMessageBatchCommand,
+  GetQueueAttributesCommand,
+  type SendMessageBatchCommandInput,
+} from "@aws-sdk/client-sqs";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Producer } from "../../src/producer.js";
 
-const sandbox = sinon.createSandbox();
+function expectBatchInput(sqs: SQSClient, expectedInput: SendMessageBatchCommandInput): void {
+  expect(sqs.send).toHaveBeenCalledOnce();
 
-const mockSendBatch = sinon.match.instanceOf(SendMessageBatchCommand);
-const mockGetAttributes = sinon.match.instanceOf(GetQueueAttributesCommand);
+  const command = vi.mocked(sqs.send).mock.calls[0]?.[0];
+  expect(command).toBeInstanceOf(SendMessageBatchCommand);
+
+  if (!(command instanceof SendMessageBatchCommand)) {
+    throw new Error("Expected SQSClient.send to receive a SendMessageBatchCommand");
+  }
+
+  expect(command.input).toEqual(expectedInput);
+}
 
 describe("Producer", () => {
   const queueUrl = "https://dummy-queue";
@@ -16,9 +27,8 @@ describe("Producer", () => {
   let sqs;
 
   beforeEach(() => {
-    sqs = sinon.createStubInstance(SQSClient);
-    sqs.send = sinon.stub();
-    sqs.send.withArgs(mockSendBatch).resolves({
+    sqs = new SQSClient({ region: "eu-west-1" });
+    vi.spyOn(sqs, "send").mockResolvedValue({
       Failed: [],
       Successful: [],
     });
@@ -30,21 +40,8 @@ describe("Producer", () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
-
-  async function rejects(producerResponse: Promise<string[]>, errMessage: string): Promise<void> {
-    let thrown = false;
-    try {
-      await producerResponse;
-    } catch (err) {
-      thrown = true;
-      assert.equal(err.message, errMessage);
-    }
-    if (!thrown) {
-      assert.fail(`Should have thrown: ${errMessage}`);
-    }
-  }
 
   it("sends string messages as a batch", async () => {
     const expectedParams = {
@@ -62,7 +59,7 @@ describe("Producer", () => {
     };
 
     await producer.send(["message1", "message2"]);
-    sqs.send.calledOnceWith(expectedParams);
+    expectBatchInput(sqs, expectedParams);
   });
 
   it("accepts a single message instead of an array", async () => {
@@ -77,7 +74,7 @@ describe("Producer", () => {
     };
 
     await producer.send("message1");
-    sqs.send.calledOnceWith(expectedParams);
+    expectBatchInput(sqs, expectedParams);
   });
 
   it("sends object messages as a batch", async () => {
@@ -105,7 +102,7 @@ describe("Producer", () => {
     };
 
     await producer.send([message1, message2]);
-    sqs.send.calledOnceWith(expectedParams);
+    expectBatchInput(sqs, expectedParams);
   });
 
   it("sends object messages with attributes as a batch", async () => {
@@ -145,7 +142,7 @@ describe("Producer", () => {
     };
 
     await producer.send([message1, message2]);
-    sqs.send.calledOnceWith(expectedParams);
+    expectBatchInput(sqs, expectedParams);
   });
 
   it("sends object messages with FIFO params as a batch", async () => {
@@ -181,7 +178,7 @@ describe("Producer", () => {
     };
 
     await producer.send([message1, message2]);
-    sqs.send.calledOnceWith(expectedParams);
+    expectBatchInput(sqs, expectedParams);
   });
 
   it("sends both string and object messages as a batch", async () => {
@@ -205,20 +202,20 @@ describe("Producer", () => {
     };
 
     await producer.send(["message1", message2]);
-    sqs.send.calledOnceWith(expectedParams);
+    expectBatchInput(sqs, expectedParams);
   });
 
   it("makes multiple batch requests when the number of messages is larger than 10", async () => {
     await producer.send(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]);
-    sandbox.assert.calledTwice(sqs.send);
+    expect(sqs.send).toHaveBeenCalledTimes(2);
   });
 
   it("returns an error when SQS fails", async () => {
     const errMessage = "sqs failed";
 
-    sqs.send.withArgs(mockSendBatch).rejects(new Error(errMessage));
+    vi.mocked(sqs.send).mockRejectedValue(new Error(errMessage));
 
-    await rejects(producer.send(["foo"]), errMessage);
+    await expect(producer.send(["foo"])).rejects.toThrow(errMessage);
   });
 
   it("returns a list of successful SQS responses from the AWS SDK", async () => {
@@ -246,11 +243,11 @@ describe("Producer", () => {
       Failed: [],
     };
 
-    sqs.send.withArgs(mockSendBatch).resolves(response);
+    vi.mocked(sqs.send).mockResolvedValue(response);
 
     const result = await producer.send(["foo"]);
 
-    assert.deepEqual(result, expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it("returns an error when messages are neither strings nor objects", async () => {
@@ -263,7 +260,7 @@ describe("Producer", () => {
     // eslint-disable-next-line func-style
     const message2 = () => {};
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages have invalid delaySeconds params 1", async () => {
@@ -279,7 +276,7 @@ describe("Producer", () => {
       body: "body2",
     };
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages have invalid delaySeconds params 2", async () => {
@@ -295,7 +292,7 @@ describe("Producer", () => {
       body: "body2",
     };
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it(`returns an error when object messages attributes don't have a DataType param`, async () => {
@@ -315,7 +312,7 @@ describe("Producer", () => {
       body: "body2",
     };
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages attributes have an invalid DataType param", async () => {
@@ -336,7 +333,7 @@ describe("Producer", () => {
       body: "body2",
     };
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages have invalid id param", async () => {
@@ -347,7 +344,7 @@ describe("Producer", () => {
       body: "body1",
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages have invalid groupId param", async () => {
@@ -359,7 +356,7 @@ describe("Producer", () => {
       groupId: 1234,
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages have invalid deduplicationId param", async () => {
@@ -372,7 +369,7 @@ describe("Producer", () => {
       deduplicationId: 1234,
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toThrow(errMessage);
   });
 
   it("returns an error when fifo messages have no groupId param", async () => {
@@ -384,7 +381,7 @@ describe("Producer", () => {
       deduplicationId: "1234",
     };
 
-    await rejects(producer.send(message1), errMessage);
+    await expect(producer.send(message1)).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages are not of shape {id, body}", async () => {
@@ -399,7 +396,7 @@ describe("Producer", () => {
       body: "body2",
     };
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it("returns an error when object messages are not of shape {id, body} 2", async () => {
@@ -414,7 +411,7 @@ describe("Producer", () => {
       body: "body2",
     };
 
-    await rejects(producer.send(["foo", message1, message2]), errMessage);
+    await expect(producer.send(["foo", message1, message2])).rejects.toThrow(errMessage);
   });
 
   it("returns an error identifying the messages that failed", async () => {
@@ -431,32 +428,28 @@ describe("Producer", () => {
         Id: "message3",
       },
     ];
-    sqs.send.withArgs(mockSendBatch).resolves({
+    vi.mocked(sqs.send).mockResolvedValue({
       Failed: failedMessages,
     });
 
-    try {
-      await producer.send(["message1", "message2", "message3"]);
-      assert.fail("Should have thrown");
-    } catch (err) {
-      assert.equal(err.message, errMessage);
-      assert.deepEqual(
-        err.failedMessages,
-        failedMessages.map((m) => m.Id),
-      );
-    }
+    await expect(producer.send(["message1", "message2", "message3"])).rejects.toMatchObject({
+      message: errMessage,
+      failedMessages: failedMessages.map((message) => message.Id),
+    });
   });
 
   it("returns the approximate size of the queue", async () => {
     const expected = "10";
-    sqs.send.withArgs(mockGetAttributes).resolves({
+    vi.mocked(sqs.send).mockResolvedValue({
       Attributes: {
         ApproximateNumberOfMessages: expected,
       },
     });
 
     const size = await producer.queueSize();
-    assert.strictEqual(size, Number(expected));
+    expect(size).toBe(Number(expected));
+    expect(sqs.send).toHaveBeenCalledOnce();
+    expect(vi.mocked(sqs.send).mock.calls[0]?.[0]).toBeInstanceOf(GetQueueAttributesCommand);
   });
 
   describe(".create", () => {
@@ -464,7 +457,7 @@ describe("Producer", () => {
       const producerInstance = Producer.create({
         queueUrl,
       });
-      assert(producerInstance.sqs instanceof SQSClient);
+      expect(producerInstance.sqs).toBeInstanceOf(SQSClient);
     });
 
     it("creates a new instance of a Producer", () => {
@@ -472,7 +465,7 @@ describe("Producer", () => {
         queueUrl,
         sqs,
       });
-      assert(producerInstance instanceof Producer);
+      expect(producerInstance).toBeInstanceOf(Producer);
     });
   });
 });
