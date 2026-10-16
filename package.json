@@ -68,7 +68,7 @@
     "@types/chai": "^5.2.3",
     "@types/node": "^26.6.2",
     "@vitest/coverage-v8": "^4.1.11",
-    "oxfmt": "^0.70.0",
+    "oxfmt": "^0.72.0",
     "oxlint": "^1.85.0",
     "typedoc": "^0.28.20",
     "typescript": "^7.0.2",
