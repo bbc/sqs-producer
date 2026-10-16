@@ -69,7 +69,7 @@
     "@types/node": "^26.6.2",
     "@vitest/coverage-v8": "^4.1.11",
     "oxfmt": "^0.70.0",
-    "oxlint": "^1.85.0",
+    "oxlint": "^1.87.0",
     "typedoc": "^0.28.20",
     "typescript": "^7.0.2",
     "vitest": "^4.1.3"
