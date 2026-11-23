@@ -32,7 +32,7 @@ jobs:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Setup pnpm and Node.js
-        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
         with:
           runtime: node@24
           install: false
